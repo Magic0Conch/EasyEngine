@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "${file}",
+                "-std=c++11",
+                "-g",
+                "${file}",
+                "-std=c++17",
+                "-I",
+                "D:/resources/mylibrary/OpenCV/includes",
+                "-I",
+                "D:/resources/mylibrary/OpenGL/includes",
+                "${workspaceFolder}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
