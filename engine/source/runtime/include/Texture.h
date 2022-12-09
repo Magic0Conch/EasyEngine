@@ -1,7 +1,7 @@
 #pragma once
 #include <glad/glad.h>
 #include "ImageProcessing.h"
-
+namespace EasyEngine {
 class Texture
 {
 public:
@@ -17,4 +17,4 @@ public:
 
 	void setTextureUnit(int textureUnit = 0);
 };
-
+}

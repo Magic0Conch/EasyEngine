@@ -2,6 +2,7 @@
 #include <string>
 #include "Utility.h"
 #include "Texture.h"
+namespace EasyEngine {
 class ModelMesh
 {
 public:
@@ -26,3 +27,4 @@ public:
 	void setTextures(const int textureLength, const string* texturePath, int sourceType = GL_BGR, int targetType = GL_RGB);
 };
 
+}

@@ -3,9 +3,9 @@
 #include <json/json.h>
 #include <iostream>
 #include <fstream>
+namespace EasyEngine {
 class JsonManipulation
 {
-public:
 private:
 	Json::Value jsonData;
 	Json::Reader reader;
@@ -15,8 +15,10 @@ private:
 public:
 
 	JsonManipulation(const std::string& jsonFilePath);
-
+	JsonManipulation();
 	virtual ~JsonManipulation();
 	Json::Value& getJsonData(const std::string& jsonFilePath = "");
+	void setJsonFilePath(const std::string& jsonFilePath);
 };
 
+}
