@@ -85,7 +85,7 @@ void initialize() {
 	loadVertexData();
 
 	boxTexture = new Texture(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(),"default/wooden_container.jpg"));
-	smileFaceTexture = new Texture(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(),"default/awesomeface.jpg"), GL_BGRA, GL_RGBA,1);
+	smileFaceTexture = new Texture(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(),"default/awesomeface.png"), GL_BGRA, GL_RGBA,1);
 	
 	//Watch out the following texture overwrite the earlier one.
 	

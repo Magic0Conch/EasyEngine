@@ -1,4 +1,6 @@
 #include "../include/Shader.h"
+#include <iostream>
+#include <stdio.h>
 
 using namespace std;
 namespace EasyEngine {
@@ -8,6 +10,7 @@ bool Shader::validateShaderSourceByShaderIndex(int shaderIndex) {
 	glGetShaderiv(shaderIndex, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(shaderIndex, 512, NULL, infoLog);
+		printf("%s",infoLog);
 		cout << "ERROR::SHADER::VERTEX\n" << infoLog << endl;
 		return false;
 	}
@@ -39,8 +42,16 @@ unsigned int Shader::loadShaderSourceByFilename(const char* vertexShaderPath, co
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
 
-	bool success = validateShaderSourceByShaderIndex(shaderProgram);
-
+	// glgetprogramiv
+	int success = 0; 
+	glGetProgramiv(shaderProgram,GL_LINK_STATUS,&success);
+		if (!success) {
+		char infoLog[512];
+		glGetShaderInfoLog(shaderProgram, 512, NULL, infoLog);
+		printf("%s",infoLog);
+		cout << "ERROR::SHADER::LINK\n" << infoLog << endl;
+		return false;
+	}
 	//Once linked them into program object, we no longer need them anymore.
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);

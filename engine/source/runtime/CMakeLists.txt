@@ -6,9 +6,10 @@ set(RUNTIME_ROOT_DIR "${SOURCE_ROOT_DIR}/runtime")
 find_package(OpenCV REQUIRED COMPONENTS core highgui imgcodecs)
 if(OpenCV_FOUND)
 message(STATUS "The Opencv lib is found!") 
-message(STATUS "    opencv dir: ${OpenCV_DIR}")
+message(STATUS "    opencv dir: ${OpenCV_LIBRARIES}")
 else()
 message(STATUS "The Opecv lib is not found!Set OpencvDir please!") 
+
 endif()
 
 
@@ -26,13 +27,14 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         external
         ${OPENGL_INCLUDE_DIR}
-        ${OPENCV_INCLUDE_DIR}        
+        ${OpenCV_INCLUDE_DIRS}        
 )
 
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ${OPENGL_gl_LIBRARY}
+        # ${OpenCV_LIBRARIES}
         glfw
         glad
         glm
