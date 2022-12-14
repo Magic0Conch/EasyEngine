@@ -6,7 +6,7 @@ set(RUNTIME_ROOT_DIR "${SOURCE_ROOT_DIR}/runtime")
 find_package(OpenCV REQUIRED COMPONENTS core highgui imgcodecs)
 if(OpenCV_FOUND)
 message(STATUS "The Opencv lib is found!") 
-message(STATUS "    opencv dir: ${OpenCV_LIBRARIES}")
+message(STATUS "    opencv dir: ${OpenCV_INCLUDE_DIRS}")
 else()
 message(STATUS "The Opecv lib is not found!Set OpencvDir please!") 
 
