@@ -4,6 +4,7 @@
 #pragma once
 #include <glad/glad.h>
 #include "Utility.h"
+#include "glm/fwd.hpp"
 #include <iostream>
 #include <string>
 #include <glm/glm.hpp>
@@ -21,15 +22,17 @@ public:
 
 	//use/activate shader
 	void use();
-	void setValue(const char*, bool value) const;
-	void setValue(const char*, int value) const;
-	void setValue(const char*, float value) const;
-	void setValue(const char*, float value_x,float value_y,float value_z) const;
-	void setValue(const char*, float,float,float,float) const;
-	void setValue(const char*, glm::mat4&) const;
+	void setValue(const char*, const bool& value);
+	void setValue(const char*, const int& value);
+	void setValue(const char* ,const float& value);
+	void setValue(const char*, const float& value_x,const float& value_y,const float& value_z);
+	void setValue(const char*, const float&,const float&,const float&,const float&);
+	void setValue(const char*, const glm::mat4&);
+	void setValue(const std::string, const glm::vec3&);
 
 private:
 	int getVariableLocation(const char*) const;
+	int getVariableLocation(const std::string&) const;
 	static bool validateShaderSourceByShaderIndex(int shaderIndex);
 	static unsigned int readAndCompileShaderByFilename(const char* filename, unsigned int shaderType);
 public:

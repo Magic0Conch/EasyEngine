@@ -2,7 +2,6 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <iostream>
 namespace EasyEngine {
-extern float viewportWidth, viewportHeight;
 
 Camera::Camera() {
 	cameraPosition = glm::vec3(.0f, .0f, 3.0f);
@@ -62,6 +61,6 @@ const glm::mat4 Camera::getCameraPoseMatrix() {
 	return cameraPoseMatrix = glm::lookAt(cameraPosition, cameraPosition+cameraFront, cameraUp);
 }
 const glm::mat4 Camera::getProjectionMatrix() {
-	return projectionMatrix = glm::perspective(glm::radians(fov), viewportWidth / viewportHeight,nearPlane, farPlane);
+	return projectionMatrix = glm::perspective(glm::radians(fov), EngineWindow::getInstance().viewportWidth / EngineWindow::getInstance().viewportHeight,nearPlane, farPlane);
 }
 }

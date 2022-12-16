@@ -66,6 +66,13 @@ int Shader::getVariableLocation(const char* name) const{
 	return location;
 }
 
+int Shader::getVariableLocation(const std::string& name) const{
+	int location = glGetUniformLocation(ID, name.c_str());
+	if (location == -1)
+		printf("ERROR: query %s failed!\n",name.c_str());
+	return location;	
+}
+
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	ID = loadShaderSourceByFilename(vertexPath, fragmentPath);
@@ -75,27 +82,31 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 void Shader::use() {
 	glUseProgram(ID);
 }
-void Shader::setValue(const char* name, bool value) const{
+void Shader::setValue(const char* name,const bool& value){
 	glUniform1i(getVariableLocation(name), (int)value);
 }
 
-void Shader::setValue(const char* name, int value) const {
+void Shader::setValue(const char* name,const int& value){
 	glUniform1i(getVariableLocation(name), (int)value);
 
 }
-void Shader::setValue(const char* name, float value) const {
+void Shader::setValue(const char* name,const float& value){
 	glUniform1f(getVariableLocation(name), value);
 }
 
-void Shader::setValue(const char* name, float value_x, float value_y, float value_z) const {
+void Shader::setValue(const char* name,const float& value_x,const float& value_y,const float& value_z){
 	glUniform3f(getVariableLocation(name),value_x,value_y,value_z);
 }
-void Shader::setValue(const char* name, float value_x, float value_y, float value_z, float value_w) const {
+void Shader::setValue(const char* name,const float& value_x,const float& value_y,const float& value_z,const float& value_w){
 	glUniform4f(getVariableLocation(name),value_x,value_y,value_z,value_w);
 }
 
-void Shader::setValue(const char* name, glm::mat4& matrix) const {
+void Shader::setValue(const char* name,const glm::mat4& matrix){
 	glUniformMatrix4fv(getVariableLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
 	//the second argument tells OpenGL how many matrices we'd like to send
+}
+
+void Shader::setValue(const std::string name, const glm::vec3& value) {
+	glUniform3f(getVariableLocation(name),value.x,value.y,value.z);
 }
 }

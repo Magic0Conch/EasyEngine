@@ -1,8 +1,8 @@
 #include "../include/InputHandler.h"
-#include "../include/WindowTime.h"
-#include <iostream>
+
 namespace EasyEngine {
 using namespace input;
+
 void input::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	InputHandler& inputHandler = InputHandler::getInstance();
 	inputHandler.currentMousePosition.x = xpos;
@@ -16,7 +16,7 @@ void input::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) 
 }
 
 InputHandler::InputHandler() {
-	currentMousePosition = glm::vec3(viewportHeight/2, viewportWidth/2, 0);
+	currentMousePosition = glm::vec3(EngineWindow::getInstance().viewportHeight/2, EngineWindow::getInstance().viewportWidth/2, 0);
 }
 InputHandler::~InputHandler() {
 

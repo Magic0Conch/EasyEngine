@@ -1,8 +1,11 @@
 #pragma once
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include "WindowTime.h"
+#include <iostream>
+#include "EngineWindow.h"
 namespace EasyEngine {
-extern float viewportWidth, viewportHeight;
+
 
 
 namespace input {

@@ -10,7 +10,7 @@ namespace EasyEngine{
         std::string fullPath;
         fullPath = directory;
         if (directory.back()!='\\') {
-            fullPath.push_back('/');
+            fullPath.push_back('\\');
         }
         fullPath.append(filePath);
         return fullPath;
