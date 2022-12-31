@@ -20,7 +20,7 @@ public:
 	ModelMesh(const std::string&, const string*, const int, const std::string&);
 	ModelMesh(const std::string&, const string*, const int textureLength = 1);
 	//ModelMesh(const std::string&, const std::string& ,const int textureLength = 1);
-	ModelMesh(const std::string&, const int textureLength = 1);
+	ModelMesh(const std::string&, const int textureLength);
 	ModelMesh(const int textureLength = 1);
 	~ModelMesh();
 	void setIndicies(const std::string& indicesFilePath);

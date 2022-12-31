@@ -9,12 +9,14 @@
 #include "../include/CameraController.h"
 #include "../include/JsonManipulation.h"
 #include "../function/global/global_context.h"
-#include "../function/render/lighting/Colors.h"
+#include "../function/render/lighting/ColorsRenderPass.h"
+#include "../function/render/lighting/PhongLightingRenderPass.h"
 #include <iostream>
 #include <memory>
 #include <string>
 using PU = EasyEngine::PathUtility;
 
+class RenderPass;
 namespace EasyEngine {
 	//must include GLAD before GLFW. The include file for GLAD includes the required OpenGL headers(GL/gl.h ... )
 	using namespace std;
@@ -22,27 +24,18 @@ namespace EasyEngine {
     private:
         Camera camera;
         CameraController cameraController;   
-        //muti object can't access the same address.
-        JsonManipulation jsonManipulation;
-        unsigned int VAO,VBO,EBO;
-        Shader* shader;
-        Texture* boxTexture,* smileFaceTexture;
-        ModelMesh* planeModelMesh;
+        shared_ptr<ColorsRenderPass> colorsRenderPass;
+        shared_ptr<PhongLightingRenderPass> phongLightingRenderPass;
 
-        glm::mat4 model ;
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection;
 
-        shared_ptr<Color> colorsObject;
     public:
 
-        Engine(const std::string&);
-        void bindArrayBuffer();
-        void bindElementArrayBuffer();
+        Engine(const std::string&);       
         void getEnviromentInfomation();
-        void loadVertexData();
         void initialize();
-        void setShaderArributes();
+        void tickRender();
         void mainLoop();
         void start();
     };

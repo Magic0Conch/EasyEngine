@@ -20,6 +20,8 @@ public:
 	//read and builds the shader	
 	Shader(const char*, const char*);
 
+	Shader();
+
 	//use/activate shader
 	void use();
 	void setValue(const char*, const bool& value);
