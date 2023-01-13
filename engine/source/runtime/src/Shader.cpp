@@ -106,7 +106,32 @@ void Shader::setValue(const char* name,const glm::mat4& matrix){
 	//the second argument tells OpenGL how many matrices we'd like to send
 }
 
-void Shader::setValue(const std::string name, const glm::vec3& value) {
+void Shader::setValue(const std::string& name, const glm::vec3& value) {
 	glUniform3f(getVariableLocation(name),value.x,value.y,value.z);
 }
+
+void Shader::setValue(const std::string& name,const bool& value){
+	glUniform1i(getVariableLocation(name), (int)value);
+}
+
+void Shader::setValue(const std::string& name,const int& value){
+	glUniform1i(getVariableLocation(name), (int)value);
+
+}
+void Shader::setValue(const std::string& name,const float& value){
+	glUniform1f(getVariableLocation(name), value);
+}
+
+void Shader::setValue(const std::string& name,const float& value_x,const float& value_y,const float& value_z){
+	glUniform3f(getVariableLocation(name),value_x,value_y,value_z);
+}
+void Shader::setValue(const std::string& name,const float& value_x,const float& value_y,const float& value_z,const float& value_w){
+	glUniform4f(getVariableLocation(name),value_x,value_y,value_z,value_w);
+}
+
+void Shader::setValue(const std::string& name,const glm::mat4& matrix){
+	glUniformMatrix4fv(getVariableLocation(name), 1, GL_FALSE, glm::value_ptr(matrix));
+	//the second argument tells OpenGL how many matrices we'd like to send
+}
+
 }

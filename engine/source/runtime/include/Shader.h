@@ -30,7 +30,13 @@ public:
 	void setValue(const char*, const float& value_x,const float& value_y,const float& value_z);
 	void setValue(const char*, const float&,const float&,const float&,const float&);
 	void setValue(const char*, const glm::mat4&);
-	void setValue(const std::string, const glm::vec3&);
+	void setValue(const std::string&, const glm::vec3&);
+	void setValue(const std::string&, const bool& value);
+	void setValue(const std::string&, const int& value);
+	void setValue(const std::string&,const float& value);
+	void setValue(const std::string&, const float& value_x,const float& value_y,const float& value_z);
+	void setValue(const std::string&, const float&,const float&,const float&,const float&);
+	void setValue(const std::string&, const glm::mat4&);
 
 private:
 	int getVariableLocation(const char*) const;

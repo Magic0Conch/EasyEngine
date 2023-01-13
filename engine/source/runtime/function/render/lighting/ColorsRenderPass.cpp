@@ -1,4 +1,5 @@
 #include "ColorsRenderPass.h"
+#include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/vector_float3.hpp"
 using namespace EasyEngine;
 ColorsRenderPass::ColorsRenderPass(const string& shaderPath)
@@ -53,6 +54,7 @@ ColorsRenderPass::ColorsRenderPass(const string& shaderPath)
             Json::Value cubePositionRaw = sceneConfig["lightPositions"][i];
             glm::vec3 worldPosition = glm::vec3(cubePositionRaw[0].asFloat(), cubePositionRaw[1].asFloat(), cubePositionRaw[2].asFloat());
             model = glm::translate(model, worldPosition);
+            model = glm::scale(model, glm::vec3(0.2f));
             setModelMatrix(model);
             setViewMatrix(camera.getCameraPoseMatrix());
             setProjectionMatrix(camera.getProjectionMatrix());
