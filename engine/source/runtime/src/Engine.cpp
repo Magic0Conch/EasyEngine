@@ -1,8 +1,6 @@
 #include "Engine.h"
-
+#include "../resource/res_type/components/Mesh.h"
 using namespace EasyEngine;
-
-
 
 void Engine::initialize(){
     colorsRenderPass = make_shared<ColorsRenderPass>("lighting\\color");
@@ -32,6 +30,7 @@ void Engine::mainLoop() {
 }
 
 void Engine::start(){
+
     EngineWindow::getInstance().createWindow();
     //load the address of the OpenGL pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {

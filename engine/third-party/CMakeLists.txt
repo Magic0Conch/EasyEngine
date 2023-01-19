@@ -62,8 +62,25 @@ add_library( ${GLAD_LIB_NAME}
 
 target_include_directories(${GLAD_LIB_NAME}
     PUBLIC
-        "${GLAD_INC_PATH}"
+        ${GLAD_INC_PATH}
 )
+
+# assimp
+# set(ASSIMP_LIB_NAME "assimp")
+# set(ASSIMP_SRC_PATH "${ASSIMP_LIB_NAME}/src")
+# set(ASSIMP_INC_PATH "${ASSIMP_LIB_NAME}/include")
+
+
+# add_library( ${ASSIMP_LIB_NAME}
+#     "${ASSIMP_LIB_NAME}/libassimp-5.dll"
+#     "${ASSIMP_LIB_NAME}/libassimp.dll.a"
+# )
+
+# target_include_directories(${ASSIMP_LIB_NAME}
+# PUBLIC
+# "${ASSIMP_INC_PATH}"
+# )
+# set_target_properties(${ASSIMP_LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 # ImGui
 # set(IMGUI_LIB_NAME "ImGui")

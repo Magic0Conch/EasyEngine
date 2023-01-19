@@ -18,16 +18,19 @@ file(GLOB_RECURSE SOURCE_FILES "*.cpp")
 file(GLOB_RECURSE HEADER_FILES "*.h")
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${HEADER_FILES} ${SOURCE_FILES})
 # message(STATUS "source: ${SOURCE_FILES}") 
-# message(STATUS "header: ${HEADER_FILES}") 
+message(STATUS "${ENGINE_ROOT_DIR}/source") 
 # Add an executable with the above sources
 add_executable(${PROJECT_NAME}  ${HEADER_FILES} ${SOURCE_FILES})
 
 
-target_include_directories(${PROJECT_NAME}
+target_include_directories(
+  ${PROJECT_NAME}
     PUBLIC
-        external
+    external
+    "${ENGINE_ROOT_DIR}/source"
         ${OPENGL_INCLUDE_DIR}
         ${OpenCV_INCLUDE_DIRS}        
+        ${GLAD_INC_PATH}
 )
 
 
@@ -42,6 +45,7 @@ target_link_libraries(${PROJECT_NAME}
         opencv_core
         opencv_highgui
         opencv_imgcodecs
+        # assimp
         #glm_static    # if build with add_subdirectory
 )
 
@@ -63,6 +67,7 @@ set(POST_BUILD_COMMANDS
 #   COMMAND ${CMAKE_COMMAND} -E copy "${ENGINE_ROOT_DIR}/${DEVELOP_CONFIG_DIR}/${PROJECT_NAME}.ini" "$<TARGET_FILE_DIR:${TARGET_NAME}>/"
   COMMAND ${CMAKE_COMMAND} -E remove_directory "${BINARY_ROOT_DIR}/${ENGINE_ASSET_DIR}"
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${ENGINE_ROOT_DIR}/${ENGINE_ASSET_DIR}" "${BINARY_ROOT_DIR}/${ENGINE_ASSET_DIR}"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${BINARY_ROOT_DIR}/${ENGINE_SHADER_DIR}"
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${ENGINE_ROOT_DIR}/${ENGINE_SHADER_DIR}" "${BINARY_ROOT_DIR}/${ENGINE_SHADER_DIR}"
 )
 # set(TARGET_NAME STATIC_RESOURCES)

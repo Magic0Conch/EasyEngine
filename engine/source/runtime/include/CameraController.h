@@ -1,5 +1,5 @@
 #pragma once
-#include "Camera.h"
+#include "../resource/res_type/components/Camera.h"
 #include "InputHandler.h"
 #include "WindowTime.h"
 namespace EasyEngine {

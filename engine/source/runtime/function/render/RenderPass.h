@@ -2,7 +2,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include "../global/global_context.h"
-#include "../../include/Camera.h"
+#include "../../resource/res_type/components/Camera.h"
 #include "../../include/JsonManipulation.h"
 namespace EasyEngine {
     using PU = EasyEngine::PathUtility;
