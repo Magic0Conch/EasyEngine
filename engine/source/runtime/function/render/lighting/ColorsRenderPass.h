@@ -4,15 +4,14 @@
 #include "glm/fwd.hpp"
 #include <glm/glm.hpp>
 #include <string>
-#include "../../../include/ModelMesh.h"
+#include "runtime/resource/res_type/components/Model.h"
 #include "../../../include/Shader.h"
 #include "../../global/global_context.h"
 #include "../RenderPass.h"
-#include "Light.h"
 namespace EasyEngine {
     using PU = EasyEngine::PathUtility;
 
-    class ColorsRenderPass:RenderPass,Light{
+    class ColorsRenderPass:public RenderPass{
     private:        
         glm::vec3 objectColor;
 

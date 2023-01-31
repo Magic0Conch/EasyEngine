@@ -9,8 +9,9 @@ out vec4 FragColor;
 
 uniform vec3 viewPos;
 struct Material{
-    sampler2D diffuseMap;
-    sampler2D specularMap;
+    sampler2D texture_diffuse1;
+    sampler2D texture_specular1;
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -28,19 +29,19 @@ uniform DirectionalLight directionalLight;
 
 vec3 CalcDirLight(DirectionalLight light,vec3 normal,vec3 viewDir){
 
-    vec3 diffuseMapCol = vec3(texture(material.diffuseMap,TexCoords));
-    vec3 ambientColor = light.ambient*diffuseMapCol*material.ambient;
+    vec3 texture_diffuse1Col = vec3(texture(material.texture_diffuse1,TexCoords));
+    vec3 ambientColor = light.ambient*texture_diffuse1Col*material.ambient;
     
     vec3 lightDir = normalize(-light.direction);
 
     float diff = max(dot(normal, lightDir), 0.0);
-    vec3 diffuseColor = diff*light.diffuse*diffuseMapCol*material.diffuse;
+    vec3 diffuseColor = diff*light.diffuse*texture_diffuse1Col*material.diffuse;
     
     // vec3 viewDir = normalize(viewPos-FragPos);
     vec3 h = normalize(lightDir + viewDir);
     float spec = pow(max(dot(h,normal),0.0) ,material.shininess);
-    vec3 specularColor = spec*material.specular*light.specular*vec3(texture(material.specularMap,TexCoords));
-    // specularColor = vec3(0.5f)*vec3(texture(material.specularMap,TexCoords))*material.specular*light.specular*spec;
+    vec3 specularColor = spec*material.specular*light.specular*vec3(texture(material.texture_specular1,TexCoords));
+    // specularColor = vec3(0.5f)*vec3(texture(material.texture_specular1,TexCoords))*material.specular*light.specular*spec;
 
     return ambientColor+diffuseColor+specularColor;
 }
@@ -60,15 +61,15 @@ uniform PointLight pointLights[NR_POINT_LIGHT];
 
 
 vec3 CalcPointLight(PointLight light,vec3 normal,vec3 viewDir){
-    vec3 diffuseMapCol = vec3(texture(material.diffuseMap,TexCoords));
-    vec3 ambientColor = diffuseMapCol*light.ambient*material.ambient;
+    vec3 texture_diffuse1Col = vec3(texture(material.texture_diffuse1,TexCoords));
+    vec3 ambientColor = texture_diffuse1Col*light.ambient*material.ambient;
 
     vec3 lightDir = normalize(light.position - FragPos);
-    vec3 diffuseColor = max(dot(lightDir,normal),0.0f)*diffuseMapCol*light.diffuse*material.diffuse;
+    vec3 diffuseColor = max(dot(lightDir,normal),0.0f)*texture_diffuse1Col*light.diffuse*material.diffuse;
 
     vec3 h = normalize(lightDir+viewDir);
     float spec = pow(max(dot(h,normal),0.0),material.shininess);
-    vec3 specularColor = spec*vec3(texture(material.specularMap,TexCoords))*material.specular*light.specular;
+    vec3 specularColor = spec*vec3(texture(material.texture_specular1,TexCoords))*material.specular*light.specular;
 
     float dist = distance(FragPos,light.position);
     float attenunation = 1.0/(light.constant + dist*light.linear + dist*dist*light.quadratic);
@@ -96,15 +97,15 @@ struct SpotLight{
 uniform SpotLight spotLights[NR_POINT_LIGHT];
 vec3 CalcSpotLight(SpotLight light,vec3 normal,vec3 viewDir){
 
-    vec3 diffuseMapCol = vec3(texture(material.diffuseMap,TexCoords));
-    vec3 ambientColor = diffuseMapCol*light.ambient*material.ambient;
+    vec3 texture_diffuse1Col = vec3(texture(material.texture_diffuse1,TexCoords));
+    vec3 ambientColor = texture_diffuse1Col*light.ambient*material.ambient;
 
     vec3 lightDir = normalize(light.position - FragPos);
-    vec3 diffuseColor = max(dot(lightDir,normal),0.0f)*diffuseMapCol*light.diffuse*material.diffuse;
+    vec3 diffuseColor = max(dot(lightDir,normal),0.0f)*texture_diffuse1Col*light.diffuse*material.diffuse;
 
     vec3 h = normalize(lightDir+viewDir);
     float spec = pow(max(dot(h,normal),0.0),material.shininess);
-    vec3 specularColor = spec*vec3(texture(material.specularMap,TexCoords))*material.specular*light.specular;
+    vec3 specularColor = spec*vec3(texture(material.texture_specular1,TexCoords))*material.specular*light.specular;
 
     float dist = distance(FragPos,light.position);
     float attenunation = 1.0/(light.constant + dist*light.linear + dist*dist*light.quadratic);
@@ -124,4 +125,5 @@ void main(){
     for(int i = 0;i<NR_SPOT_LIGHT;++i)
         resultColor+=CalcSpotLight(spotLights[i],normal,viewDir);
     FragColor = vec4(resultColor,1.0f);
+    
 }

@@ -12,6 +12,13 @@ message(STATUS "The Opecv lib is not found!Set OpencvDir please!")
 
 endif()
 
+find_package(assimp CONFIG REQUIRED)
+if (assimp_FOUND)
+  message(STATUS "ASSIMP_LIBRARY_DIR" ${OpenCV_INCLUDE_DIRS} ${ASSIMP_LIBRARY_DIR})
+    # set(ASSIMP_LIBRARY "assimp")
+    # add_library(${ASSIMP_LIBRARY} SHARED IMPORTED)
+    # set_target_properties(${ASSIMP_LIBRARY} PROPERTIES IMPORTED_LOCATION "${ASSIMP_LIBRARY_DIRS}/libassimp.so")
+endif(assimp_FOUND)
 
 # Create a sources variable with a link to all cpp files to compile
 file(GLOB_RECURSE SOURCE_FILES "*.cpp")
@@ -22,6 +29,7 @@ message(STATUS "${ENGINE_ROOT_DIR}/source")
 # Add an executable with the above sources
 add_executable(${PROJECT_NAME}  ${HEADER_FILES} ${SOURCE_FILES})
 
+message(STATUS "assimp:" ${ASSIMP_LIBRARY})
 
 target_include_directories(
   ${PROJECT_NAME}
@@ -29,7 +37,8 @@ target_include_directories(
     external
     "${ENGINE_ROOT_DIR}/source"
         ${OPENGL_INCLUDE_DIR}
-        ${OpenCV_INCLUDE_DIRS}        
+        ${OpenCV_INCLUDE_DIRS}
+        ${ASSIMP_INCLUDE_DIRS}       
         ${GLAD_INC_PATH}
 )
 
@@ -37,6 +46,7 @@ target_include_directories(
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ${OPENGL_gl_LIBRARY}
+        ${ASSIMP_LIBRARY}
         # ${OpenCV_LIBRARIES}
         glfw
         glad
@@ -45,7 +55,7 @@ target_link_libraries(${PROJECT_NAME}
         opencv_core
         opencv_highgui
         opencv_imgcodecs
-        # assimp
+        assimp
         #glm_static    # if build with add_subdirectory
 )
 

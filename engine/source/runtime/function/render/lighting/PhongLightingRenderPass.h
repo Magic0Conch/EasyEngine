@@ -6,16 +6,13 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <string>
-#include "../../../include/ModelMesh.h"
-#include "../../../include/Shader.h"
-#include "../../../include/Texture.h"
+#include "runtime/resource/res_type/components/Model.h"
 #include "../../global/global_context.h"
 #include "../RenderPass.h"
-#include "Light.h"
 namespace EasyEngine {
     using PU = EasyEngine::PathUtility;
 
-    class PhongLightingRenderPass:RenderPass,Light{
+    class PhongLightingRenderPass:public RenderPass{
     private:
         glm::vec3 resultColor;
         glm::vec3 objectColor;
@@ -25,6 +22,7 @@ namespace EasyEngine {
 
         shared_ptr<Texture> diffuseMap;
         shared_ptr<Texture> specularMap;
+        vector<Model> models;
     public:
         PhongLightingRenderPass(const string& shaderPath);
         virtual void draw(Camera& camera);

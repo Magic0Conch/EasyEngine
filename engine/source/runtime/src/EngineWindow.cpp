@@ -29,17 +29,18 @@ void EngineWindow::createWindow(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    
     //create the window
-    EngineWindow::getInstance().window = glfwCreateWindow(EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight,  "Rasterization", NULL, NULL);//window witdth,height,name
-    if (EngineWindow::getInstance().window == NULL) {
+    window = glfwCreateWindow(EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight,  "Rasterization", NULL, NULL);//window witdth,height,name
+    if (window == NULL) {
         std::cout << "create window failed" << std::endl;
         glfwTerminate();
         return;
     }
     //tell GLFW to make the context of our window the main context on the current threaed
-    glfwMakeContextCurrent(EngineWindow::getInstance().window);
+    glfwMakeContextCurrent(window);
 
     glViewport(0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight);//position, size(in pixels)
     // glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetFramebufferSizeCallback(EngineWindow::getInstance().window, framebufferSizeCallback);
+    glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 }

@@ -7,7 +7,7 @@ namespace EasyEngine {
 	{
 	private:
 		mutable glm::dvec3 moveSpeed = { 2.5,1.5,-3 };
-		mutable glm::dvec3 rotationSpeed = { 30.0f,20.0f,250.0f };
+		mutable glm::dvec3 rotationSpeed = { 1.0f,1.0f,1.0f };
 	public:
 		Camera* camera;
 	public:

@@ -5,7 +5,7 @@
 #include "../include/ImageProcessing.h"
 #include "../include/Texture.h"
 #include "../include/WindowTime.h"
-#include "../include/ModelMesh.h"
+// #include "../include/ModelMesh.h"
 #include "../include/CameraController.h"
 #include "../include/JsonManipulation.h"
 #include "../function/global/global_context.h"
@@ -24,8 +24,7 @@ namespace EasyEngine {
     private:
         Camera camera;
         CameraController cameraController;   
-        shared_ptr<ColorsRenderPass> colorsRenderPass;
-        shared_ptr<PhongLightingRenderPass> phongLightingRenderPass;
+        vector<shared_ptr<RenderPass>> renderPasses;
 
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection;

@@ -1,9 +1,8 @@
 #pragma once
 #include <string>
-// #include <filesystem>
-#include "../../function/global/global_context.h"
 #include <fstream>
-#include "../config_manager/ConfigManager.h"
+#include "runtime/function/global/global_context.h"
+#include "runtime/resource/config_manager/ConfigManager.h"
 namespace EasyEngine {
     class GlobalContext;
     class ConfigManager;

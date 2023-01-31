@@ -1,19 +1,26 @@
 #include "Engine.h"
-#include "../resource/res_type/components/Mesh.h"
+#include "runtime/function/render/test/DepthTesting.h"
+#include "runtime/function/render/test/StencilTesting.h"
+#include <memory>
+
 using namespace EasyEngine;
 
 void Engine::initialize(){
-    colorsRenderPass = make_shared<ColorsRenderPass>("lighting\\color");
-    colorsRenderPass->initialize();
-    phongLightingRenderPass = make_shared<PhongLightingRenderPass>("lighting\\phong");
-    phongLightingRenderPass->initialize();
+    renderPasses.emplace_back(make_shared<StencilTesting>("test/stencil_testing"));
+    // renderPasses.emplace_back(make_shared<PhongLightingRenderPass>("lighting/phong"));
+    for (const shared_ptr<RenderPass> rp : renderPasses) {
+        rp->initialize();
+    }    
 }
 
 void Engine::tickRender() {
     projection = camera.getProjectionMatrix();
     view = camera.getCameraPoseMatrix();
-    colorsRenderPass->draw(camera);
-    phongLightingRenderPass->draw(camera);
+    // colorsRenderPass->draw(camera);
+    for (const shared_ptr<RenderPass> rp : renderPasses) {
+        rp->draw(camera);
+    }    
+    // phongLightingRenderPass->draw(camera);
 }
 void Engine::mainLoop() {
     //Time
@@ -23,8 +30,8 @@ void Engine::mainLoop() {
     input::InputHandler::getInstance().handleInput(EngineWindow::getInstance().window);
     cameraController.processInput();
     //render
-    glClearColor(.0f, .0f, .0f, .0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
     tickRender();
     glfwSwapBuffers(EngineWindow::getInstance().window);
 }

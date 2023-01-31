@@ -19,9 +19,11 @@ bool Shader::validateShaderSourceByShaderIndex(int shaderIndex) {
 
 unsigned int Shader::readAndCompileShaderByFilename(const char* filename, unsigned int shaderType) {
 	//read and compile the vertex shader
-	const char* shaderSource = Utility::textFileRead(filename);
+	std::string shaderSource = Utility::textFileRead(filename);
+	// cout<<shaderSource<<endl;
+	const char* shaderSourceCFormat = shaderSource.c_str();
 	unsigned int shader = glCreateShader(shaderType);
-	glShaderSource(shader, 1, &shaderSource, NULL);
+	glShaderSource(shader, 1, &shaderSourceCFormat, NULL);
 	glCompileShader(shader);
 	if (validateShaderSourceByShaderIndex(shader)) {
 		return shader;

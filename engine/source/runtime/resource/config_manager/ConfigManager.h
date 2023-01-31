@@ -1,9 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include <windows.h>
-#include <Shlobj.h>
-#include "../../platform/path_utility/PathUtility.h"
+#include "runtime/platform/path_utility/PathUtility.h"
 namespace EasyEngine {
     class PathUtility;
     class ConfigManager{
