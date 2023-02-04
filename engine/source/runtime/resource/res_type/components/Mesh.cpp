@@ -23,7 +23,7 @@ namespace EasyEngine{
             else if(name == "texture_specular")
                 number = std::to_string(specularNr++);
 
-            // shader.setValue(("material." + name + number).c_str(), (int)i);
+            shader.setValue(("material." + name + number).c_str(), (int)i);
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
         glActiveTexture(GL_TEXTURE0);

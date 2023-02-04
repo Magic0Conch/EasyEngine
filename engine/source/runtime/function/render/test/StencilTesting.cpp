@@ -142,8 +142,6 @@ namespace EasyEngine {
         glDisable(GL_DEPTH_TEST);
 
         shaderSingleColor->use();
-        shaderSingleColor->setValue("view",view);
-        shaderSingleColor->setValue("projection",projection);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
         model = glm::scale(model, glm::vec3(1.1f,1.1f,1.1f));

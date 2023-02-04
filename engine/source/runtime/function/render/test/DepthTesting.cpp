@@ -100,8 +100,6 @@ namespace EasyEngine {
         glm::mat4 view = camera.getCameraPoseMatrix();
         glm::mat4 projection = camera.getProjectionMatrix();
 
-        shader->setValue("view",view);
-        shader->setValue("projection",projection);
 
          // cubes
         glBindVertexArray(cubeVAO);

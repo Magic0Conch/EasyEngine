@@ -36,11 +36,11 @@ ColorsRenderPass::ColorsRenderPass(const string& shaderPath)
         // shader->setValue("model",glm::translate(modelMatrix, lightPos));
     }
     void ColorsRenderPass::setViewMatrix(const glm::mat4& view){
-        shader->setValue("view", view);
+        // shader->setValue("view", view);
     }
 
     void ColorsRenderPass::setProjectionMatrix(const glm::mat4& projection){
-        shader->setValue("projection", projection);
+        // shader->setValue("projection", projection);
     }
 
     void ColorsRenderPass::draw(Camera& camera){

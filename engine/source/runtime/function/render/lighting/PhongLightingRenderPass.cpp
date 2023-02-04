@@ -6,7 +6,8 @@
 
 
 using namespace EasyEngine;
-
+//To get visuals similar to Phong shading the specular shininess exponent has to be set a bit higher. 
+//A general rule of thumb is to set it between 2 and 4 times the Phong shininess exponent. 
 PhongLightingRenderPass::PhongLightingRenderPass(const string& shaderPath)
 : RenderPass(shaderPath),objectColor(1.0f,0.5f,0.31f),ambientStrength(0.1f),specularStrength(1.0f){}
 
@@ -61,8 +62,8 @@ void PhongLightingRenderPass::draw(Camera& camera){
     shader->setValue("spotLights[0].outerCutOff",glm::cos(glm::radians(20.0f)));
 
 
-    shader->setValue("view",camera.getCameraPoseMatrix());
-    shader->setValue("projection",camera.getProjectionMatrix());
+    // shader->setValue("view",camera.getCameraPoseMatrix());
+    // shader->setValue("projection",camera.getProjectionMatrix());
     shader->setValue("viewPos",camera.cameraPosition);
 
 

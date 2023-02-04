@@ -15,11 +15,14 @@ namespace EasyEngine {
         Json::Value sceneConfig;
         glm::mat4 model;
         std::shared_ptr<Shader> shader;
+        uint uniformBlockIndex;
 
     public:
         virtual void initialize()=0;
         virtual void draw(Camera& camera)=0;
         RenderPass(const std::string& shaderPath);
+        RenderPass(const std::string& vertpath,const std::string& geompath,const std::string& fragpath);
+        RenderPass();
     };
 
 }

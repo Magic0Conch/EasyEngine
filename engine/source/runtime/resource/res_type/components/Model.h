@@ -12,7 +12,7 @@
 namespace EasyEngine {
 static int loadedCount = 0;
 class Model{
-    private:
+    public:
         vector<Texture> textures_loaded; 
         vector<Mesh> meshes;
         string directory;

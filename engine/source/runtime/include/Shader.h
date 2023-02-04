@@ -19,7 +19,8 @@ public:
 
 	//read and builds the shader	
 	Shader(const char*, const char*);
-
+	Shader(const std::string& vertpath,const std::string& fragpath);
+	Shader(const std::string& vertpath,const std::string& geompath,const std::string& fragpath);
 	Shader();
 
 	//use/activate shader
@@ -31,6 +32,7 @@ public:
 	void setValue(const char*, const float&,const float&,const float&,const float&);
 	void setValue(const char*, const glm::mat4&);
 	void setValue(const std::string&, const glm::vec3&);
+	void setValue(const std::string&, const glm::vec2&);
 	void setValue(const std::string&, const bool& value);
 	void setValue(const std::string&, const int& value);
 	void setValue(const std::string&,const float& value);
@@ -41,7 +43,7 @@ public:
 private:
 	int getVariableLocation(const char*) const;
 	int getVariableLocation(const std::string&) const;
-	static bool validateShaderSourceByShaderIndex(int shaderIndex);
+	static bool validateShaderSourceByShaderIndex(int shaderIndex,const std::string type);
 	static unsigned int readAndCompileShaderByFilename(const char* filename, unsigned int shaderType);
 public:
 	static unsigned int loadShaderSourceByFilename(const char* vertexShaderPath, const char* fragmentShaderPath);

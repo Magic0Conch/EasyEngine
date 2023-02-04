@@ -1,17 +1,18 @@
 #include "../include/Shader.h"
 #include <iostream>
 #include <stdio.h>
+#include <string>
 
 using namespace std;
 namespace EasyEngine {
-bool Shader::validateShaderSourceByShaderIndex(int shaderIndex) {
+bool Shader::validateShaderSourceByShaderIndex(int shaderIndex,const string type) {
 	int success;
 	char infoLog[512];
 	glGetShaderiv(shaderIndex, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(shaderIndex, 512, NULL, infoLog);
 		printf("%s",infoLog);
-		cout << "ERROR::SHADER::VERTEX\n" << infoLog << endl;
+		cout << "ERROR::SHADER::"<<type<<"\n" << infoLog << endl;
 		return false;
 	}
 	return true;
@@ -25,18 +26,17 @@ unsigned int Shader::readAndCompileShaderByFilename(const char* filename, unsign
 	unsigned int shader = glCreateShader(shaderType);
 	glShaderSource(shader, 1, &shaderSourceCFormat, NULL);
 	glCompileShader(shader);
-	if (validateShaderSourceByShaderIndex(shader)) {
-		return shader;
-	}
-	return -1;
+	return shader;
 }
 
 unsigned int Shader::loadShaderSourceByFilename(const char* vertexShaderPath, const char* fragmentShaderPath) {
 	//read and compile the vertex shader 
 	unsigned int vertexShader = readAndCompileShaderByFilename(vertexShaderPath, GL_VERTEX_SHADER);
-
+	validateShaderSourceByShaderIndex(vertexShader,"VERT");
+	
 	//read and compile the fragment shader
 	unsigned int fragmentShader = readAndCompileShaderByFilename(fragmentShaderPath, GL_FRAGMENT_SHADER);
+	validateShaderSourceByShaderIndex(fragmentShader,"FRAG");
 
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
@@ -80,6 +80,49 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	ID = loadShaderSourceByFilename(vertexPath, fragmentPath);
 }
 
+Shader::Shader(const std::string& vertpath,const std::string& fragpath){
+	ID = loadShaderSourceByFilename(vertpath.c_str(), fragpath.c_str());
+}
+Shader::Shader(const std::string& vertpath,const std::string& geompath,const std::string& fragpath){
+	//read and compile the vertex shader 
+	unsigned int vertexShader = readAndCompileShaderByFilename(vertpath.c_str(), GL_VERTEX_SHADER);
+
+	unsigned int geometryShader = readAndCompileShaderByFilename(geompath.c_str(), GL_GEOMETRY_SHADER);
+
+	//read and compile the fragment shader
+	unsigned int fragmentShader = readAndCompileShaderByFilename(fragpath.c_str(), GL_FRAGMENT_SHADER);
+	validateShaderSourceByShaderIndex(fragmentShader,"FRAG");
+	validateShaderSourceByShaderIndex(vertexShader,"VERT");
+	validateShaderSourceByShaderIndex(geometryShader,"GEOM");
+
+	unsigned int shaderProgram;
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	if (geometryShader>0) {
+		glAttachShader(shaderProgram, geometryShader);
+	}
+	glLinkProgram(shaderProgram);
+
+	// glgetprogramiv
+	int success = 0; 
+	glGetProgramiv(shaderProgram,GL_LINK_STATUS,&success);
+		if (!success) {
+		char infoLog[512];
+		glGetShaderInfoLog(shaderProgram, 512, NULL, infoLog);
+		printf("%s",infoLog);
+		cout << "ERROR::SHADER::LINK\n" << infoLog << endl;
+		return;
+	}
+	//Once linked them into program object, we no longer need them anymore.
+	glDeleteShader(vertexShader);
+	if (geometryShader>0) {
+		glDeleteShader(geometryShader);
+	}
+	glDeleteShader(fragmentShader);
+	ID = shaderProgram;
+}
+
 //use/activate shader
 void Shader::use() {
 	glUseProgram(ID);
@@ -88,7 +131,7 @@ void Shader::setValue(const char* name,const bool& value){
 	glUniform1i(getVariableLocation(name), (int)value);
 }
 
-void Shader::setValue(const char* name,const int& value){
+void Shader::setValue(const char* name,const int& value){  
 	glUniform1i(getVariableLocation(name), (int)value);
 
 }
@@ -110,6 +153,9 @@ void Shader::setValue(const char* name,const glm::mat4& matrix){
 
 void Shader::setValue(const std::string& name, const glm::vec3& value) {
 	glUniform3f(getVariableLocation(name),value.x,value.y,value.z);
+}
+void Shader::setValue(const std::string& name, const glm::vec2& value) {
+	glUniform2f(getVariableLocation(name),value.x,value.y);
 }
 
 void Shader::setValue(const std::string& name,const bool& value){

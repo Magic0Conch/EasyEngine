@@ -1,13 +1,32 @@
 #include "Engine.h"
+#include "runtime/function/render/PostProcessingPass.h"
+#include "runtime/function/render/SkyboxRenderpass.h"
+#include "runtime/function/render/postprocessing/MSAA.h"
+#include "runtime/function/render/preprocessing/PreProcessingPass.h"
+#include "runtime/function/render/scene/AsteroidField.h"
+#include "runtime/function/render/test/BlendTesting.h"
 #include "runtime/function/render/test/DepthTesting.h"
+#include "runtime/function/render/test/ExplodingObjects.h"
+#include "runtime/function/render/test/GeometryTesting.h"
+#include "runtime/function/render/test/InstancingTesting.h"
+#include "runtime/function/render/test/ReflectionTesting.h"
 #include "runtime/function/render/test/StencilTesting.h"
+#include "runtime/function/render/test/VisualizeNormalVectors.h"
 #include <memory>
 
 using namespace EasyEngine;
 
 void Engine::initialize(){
-    renderPasses.emplace_back(make_shared<StencilTesting>("test/stencil_testing"));
-    // renderPasses.emplace_back(make_shared<PhongLightingRenderPass>("lighting/phong"));
+    renderPasses.emplace_back(make_shared<PreProcessingPass>());
+    // renderPasses.emplace_back(make_shared<BlendTesting>("test/blend_testing"));
+    // renderPasses.emplace_back(make_shared<SkyboxRenderpass>("skybox"));
+    // renderPasses.emplace_back(make_shared<ReflectionTesting>("test/reflection_testing"));
+    // renderPasses.emplace_back(make_shared<GeometryTesting>("test/geometry_testing","test/geometry_testing","test/geometry_testing"));
+    // renderPasses.emplace_back(make_shared<ExplodingObjects>("test/exploding_objects"));visualize_normal_vectors
+    // renderPasses.emplace_back(make_shared<VisualizeNormalVectors>("common/triangle","test/visualize_normal_vectors"));
+    // renderPasses.emplace_back(make_shared<InstancingTesting>("test/instancing_testing"));
+    // renderPasses.emplace_back(make_shared<AsteroidField>("scene/asteroid_field"));
+    renderPasses.emplace_back(make_shared<MSAA>("postprocessing/MSAA"));
     for (const shared_ptr<RenderPass> rp : renderPasses) {
         rp->initialize();
     }    

@@ -16,7 +16,7 @@ namespace EasyEngine {
     };
 
     class Mesh{
-    private:
+    public:
         unsigned int VAO,VBO,EBO;
         void setupMesh();
     public:

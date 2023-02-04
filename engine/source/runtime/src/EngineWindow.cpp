@@ -1,4 +1,5 @@
 #include "../include/EngineWindow.h"
+#include <GL/gl.h>
 
 using namespace EasyEngine;
 
@@ -28,7 +29,9 @@ void EngineWindow::createWindow(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    //anti aliasing
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    glEnable(GL_MULTISAMPLE);
     
     //create the window
     window = glfwCreateWindow(EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight,  "Rasterization", NULL, NULL);//window witdth,height,name
