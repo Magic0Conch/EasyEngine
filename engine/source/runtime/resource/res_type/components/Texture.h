@@ -12,7 +12,7 @@ public:
     unsigned int id;
     std::string type;
     std::string path;
-    Texture(const std::string& path,const GLenum& textureType = GL_TEXTURE_2D);
+    Texture(const std::string& path,const GLenum& textureType = GL_TEXTURE_2D,bool gammaCorrection = false,bool inverseY = false);
     Texture(const std::vector<std::string>& paths,const GLenum& textureType = GL_TEXTURE_CUBE_MAP);
 };
 

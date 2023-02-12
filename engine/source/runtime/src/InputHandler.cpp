@@ -1,16 +1,16 @@
 #include "../include/InputHandler.h"
+#include "GLFW/glfw3.h"
 
 namespace EasyEngine {
-using namespace input;
 
-void input::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	InputHandler& inputHandler = InputHandler::getInstance();
 	inputHandler.currentMousePosition.x = xpos;
 	inputHandler.currentMousePosition.y = -ypos;
 
 }
 
-void input::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	InputHandler& inputHandler = InputHandler::getInstance();
 	inputHandler.currentMousePosition.z = inputHandler.currentMousePosition.z+ yoffset;
 }
@@ -33,7 +33,9 @@ void InputHandler::handleInput(GLFWwindow* window)
 {
 	//first mouse
 	if (firstMouse) {
+		glfwPollEvents();
 		lastMousePosition = currentMousePosition;
+		
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glfwSetCursorPosCallback(window, mouse_callback);
 		glfwSetScrollCallback(window, scroll_callback);
@@ -80,5 +82,20 @@ void InputHandler::handleInput(GLFWwindow* window)
 	lastMousePosition = currentMousePosition;
 	mouseInputAxis = mouseOffset;
 	//std::cout << mouseInputAxis.x << ":" << mouseInputAxis.y << ":" << mouseInputAxis.z << std::endl;
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !isPressedG) {
+		gammaEnabled = !gammaEnabled;
+		isPressedG = true;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE) {
+		isPressedG = false;
+	}
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS&&!isPressedESC) {
+		closeWindow = !closeWindow;
+		isPressedESC = true;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_RELEASE) {
+		isPressedESC = false;
+	}
+
 }
 }

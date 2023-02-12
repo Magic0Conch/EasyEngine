@@ -1,32 +1,43 @@
 #include "Engine.h"
 #include "runtime/function/render/PostProcessingPass.h"
 #include "runtime/function/render/SkyboxRenderpass.h"
+#include "runtime/function/render/lighting/PhongLightingRenderPass.h"
+#include "runtime/function/render/lighting/ShadowMapping.h"
+#include "runtime/function/render/lighting/ShadowMappingPoint.h"
 #include "runtime/function/render/postprocessing/MSAA.h"
 #include "runtime/function/render/preprocessing/PreProcessingPass.h"
 #include "runtime/function/render/scene/AsteroidField.h"
 #include "runtime/function/render/test/BlendTesting.h"
 #include "runtime/function/render/test/DepthTesting.h"
 #include "runtime/function/render/test/ExplodingObjects.h"
+#include "runtime/function/render/test/GammaCorrectionTesting.h"
 #include "runtime/function/render/test/GeometryTesting.h"
 #include "runtime/function/render/test/InstancingTesting.h"
 #include "runtime/function/render/test/ReflectionTesting.h"
 #include "runtime/function/render/test/StencilTesting.h"
 #include "runtime/function/render/test/VisualizeNormalVectors.h"
+#include "runtime/function/render/test/NormalmapTesting.h"
+#include "runtime/include/InputHandler.h"
 #include <memory>
 
 using namespace EasyEngine;
 
 void Engine::initialize(){
     renderPasses.emplace_back(make_shared<PreProcessingPass>());
+    // renderPasses.emplace_back(make_shared<PhongLightingRenderPass>("lighting/phong"));
     // renderPasses.emplace_back(make_shared<BlendTesting>("test/blend_testing"));
     // renderPasses.emplace_back(make_shared<SkyboxRenderpass>("skybox"));
     // renderPasses.emplace_back(make_shared<ReflectionTesting>("test/reflection_testing"));
     // renderPasses.emplace_back(make_shared<GeometryTesting>("test/geometry_testing","test/geometry_testing","test/geometry_testing"));
-    // renderPasses.emplace_back(make_shared<ExplodingObjects>("test/exploding_objects"));visualize_normal_vectors
+    // renderPasses.emplace_back(make_shared<ExplodingObjects>("test/exploding_objects"));
     // renderPasses.emplace_back(make_shared<VisualizeNormalVectors>("common/triangle","test/visualize_normal_vectors"));
     // renderPasses.emplace_back(make_shared<InstancingTesting>("test/instancing_testing"));
     // renderPasses.emplace_back(make_shared<AsteroidField>("scene/asteroid_field"));
-    renderPasses.emplace_back(make_shared<MSAA>("postprocessing/MSAA"));
+    // renderPasses.emplace_back(make_shared<MSAA>("postprocessing/MSAA"));
+    // renderPasses.emplace_back(make_shared<DepthTesting>("test/depth_testing"));
+    // renderPasses.emplace_back(make_shared<ShadowMapping>("lighting/shadow_render"));
+    // renderPasses.emplace_back(make_shared<ShadowMappingPoint>("lighting/shadow_render_point"));
+    renderPasses.emplace_back(make_shared<NormalmapTesting>("test/normalmap_testing"));
     for (const shared_ptr<RenderPass> rp : renderPasses) {
         rp->initialize();
     }    
@@ -46,7 +57,7 @@ void Engine::mainLoop() {
     WindowTime::updateTimeValue();
     //Events
     glfwPollEvents();
-    input::InputHandler::getInstance().handleInput(EngineWindow::getInstance().window);
+    InputHandler::getInstance().handleInput(EngineWindow::getInstance().window);
     cameraController.processInput();
     //render
     glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
@@ -65,7 +76,7 @@ void Engine::start(){
     initialize();
     glEnable(GL_DEPTH_TEST);
     //Main render loop
-    while (!glfwWindowShouldClose(EngineWindow::getInstance().window)) {		
+    while (!glfwWindowShouldClose(EngineWindow::getInstance().window) && !InputHandler::getInstance().closeWindow) {		
         mainLoop();
     }
     glfwTerminate();

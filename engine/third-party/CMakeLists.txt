@@ -1,5 +1,5 @@
 # GLFW
-set(GLFW_LIB_NAME "glfw") #not sensitive to upper and lower case?
+set(GLFW_LIB_NAME "glfw-master") #not sensitive to upper and lower case?
 set(GLFW_INC_PATH ${GLFW_LIB_NAME}/include)
 
 set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)

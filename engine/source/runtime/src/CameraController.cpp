@@ -8,7 +8,7 @@ CameraController::CameraController(Camera& initialCamera) {
 }
 
 void CameraController::processInput() {
-	input::InputHandler& inputHandler = input::InputHandler::getInstance();
+	InputHandler& inputHandler = InputHandler::getInstance();
 	glm::vec3 translationVector = inputHandler.buttonInputAxis * moveSpeed * WindowTime::deltaTimeValue;
 	glm::vec3 rotationVector = inputHandler.mouseInputAxis * rotationSpeed * WindowTime::deltaTimeValue;
 	glm::vec3 deltaPosition = -translationVector.z * camera->cameraFront - translationVector.y * camera->cameraUp  -translationVector.x * camera->cameraRight;

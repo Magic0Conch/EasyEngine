@@ -10,7 +10,7 @@ namespace EasyEngine {
 	class ImageProcessing
 	{
 	public:
-		static Mat readImageByPath(const string& imagePath, int colorFlag = IMREAD_UNCHANGED);
+		static Mat readImageByPath(const string& imagePath, int colorFlag = IMREAD_UNCHANGED,bool inverseY = false);
 	};
 
 }

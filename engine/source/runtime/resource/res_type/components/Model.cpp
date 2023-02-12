@@ -95,7 +95,7 @@ namespace EasyEngine{
                 if (skip) {
                     continue;
                 }
-                Texture texture(PathUtility::getFullPath(directory, str.C_Str()));                
+                Texture texture(PathUtility::getFullPath(directory, str.C_Str()),GL_TEXTURE_2D,false,true);                
                 texture.type = typeName;
                 texture.path = str.C_Str();
                 textures.emplace_back(texture);

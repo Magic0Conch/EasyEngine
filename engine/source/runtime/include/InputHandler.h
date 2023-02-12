@@ -6,9 +6,6 @@
 #include "EngineWindow.h"
 namespace EasyEngine {
 
-
-
-namespace input {
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	class InputHandler
@@ -21,13 +18,17 @@ namespace input {
 		glm::dvec3 mouseOffset;
 		bool firstMouse = true;
 
-
+		bool isPressedG =false;
+		bool isPressedESC =false;
+		
 	public:
 		enum Axis {
 			XAXIS, YAXIS, ZAXIS
 		};
 		glm::dvec3 buttonInputAxis;
 		glm::dvec3 mouseInputAxis;
+		bool gammaEnabled = false;
+		bool closeWindow = false;
 
 	private:
 		InputHandler();
@@ -37,7 +38,5 @@ namespace input {
 		static InputHandler& getInstance();
 		void handleInput(GLFWwindow* window);
 	};
-}
-
 
 }

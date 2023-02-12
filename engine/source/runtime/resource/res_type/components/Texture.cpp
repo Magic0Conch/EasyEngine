@@ -1,9 +1,10 @@
 #include "Texture.h"
+#include <opencv2/imgcodecs.hpp>
 #include <string>
 
 namespace EasyEngine {
-    Texture::Texture(const std::string& path,const GLenum& textureType){
-        cv::Mat data = ImageProcessing::readImageByPath(path);
+    Texture::Texture(const std::string& path,const GLenum& textureType,bool gammaCorrection,bool inverseY){
+        cv::Mat data = ImageProcessing::readImageByPath(path,IMREAD_UNCHANGED,inverseY);
         if (data.empty()) {
             cout << "Texture::Texture: load texture from "+path + " failed";
             return;
@@ -20,15 +21,15 @@ namespace EasyEngine {
         GLenum format_target,format_source;
         switch (data.channels()) {
             case 1:
-                format_target = GL_RED;
+                format_target = GL_RED;//internalFormat 
                 format_source = GL_RED;
                 break;
             case 3:
-                format_target = GL_RGB;
+                format_target = gammaCorrection?GL_SRGB:GL_RGB;
                 format_source = GL_BGR;
                 break;
             case 4:
-                format_target = GL_RGBA;
+                format_target = gammaCorrection?GL_SRGB_ALPHA:GL_RGBA;
                 format_source = GL_BGRA;
                 break;
         } 

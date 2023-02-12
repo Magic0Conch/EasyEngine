@@ -12,10 +12,12 @@ namespace EasyEngine {
             uint quadVAO;
             std::shared_ptr<RenderPass> drawPass;
             
+            // bool withFramebuffer = false;
+
         public:
             virtual void initialize();
             virtual void draw(Camera& camera);
-            PostProcessingPass(const std::string& shaderPath,std::shared_ptr<RenderPass> drawPass);
+            PostProcessingPass(const std::string& shaderPath, std::shared_ptr<RenderPass> drawPass,uint drawPassFrameBuffer = -1);
 
     };
 
