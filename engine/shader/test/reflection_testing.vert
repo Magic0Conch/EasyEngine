@@ -12,7 +12,7 @@ layout(std140) uniform Matrices{
 };
 
 void main(){
-    Normal = mat3(transpose(inverse(model))) * aNormal; //TODO: ?
+    Normal = mat3(transpose(inverse(model))) * aNormal; 
     Positon = vec3(model*vec4(aPos,1.0));
     gl_Position = projection*view*model*vec4(aPos,1.0);    
 }

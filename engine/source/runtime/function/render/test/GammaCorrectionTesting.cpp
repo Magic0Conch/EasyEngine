@@ -5,13 +5,14 @@
 #include "runtime/include/EngineWindow.h"
 #include "runtime/include/WindowTime.h"
 #include "runtime/resource/res_type/components/Model.h"
-#include <GL/gl.h>
-#include <GL/glext.h>
+// #include <GL/gl.h>
+// #include <GL/glext.h>
 #include <cstddef>
 #include <cstdlib>
 #include <memory>
 #include <sys/types.h>
 #include "runtime/include/InputHandler.h"
+#include "runtime/resource/res_type/components/Texture.h"
 
 
 //glEnable(GL_FRAMEBUFFER_SRGB); 
@@ -45,8 +46,8 @@ namespace EasyEngine {
 
         // load textures
         // -------------
-        floorTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/woodfloor.jpg"),GL_TEXTURE_2D,false);
-        floorTextureGammaCorrected = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/woodfloor.jpg"),GL_TEXTURE_2D,true);
+        floorTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/woodfloor.jpg"),GL_TEXTURE_2D,DEFAULT);
+        floorTextureGammaCorrected = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/woodfloor.jpg"),GL_TEXTURE_2D,GAMMACORRECTION);
 
         shader->use();
         shader->setValue("texture1",0);
@@ -72,7 +73,7 @@ namespace EasyEngine {
         glUniform3fv(glGetUniformLocation(shader->ID,"lightPositions"),4,&lightPositions[0][0]);
         glUniform3fv(glGetUniformLocation(shader->ID,"lightColors"),4,&lightColors[0][0]);
         shader->setValue("viewPos",camera.cameraPosition);
-        gammaEnabled = InputHandler::getInstance().gammaEnabled;
+        gammaEnabled = InputHandler::getInstance().Gpressed;
         shader->setValue("gamma",gammaEnabled);
         
         glBindVertexArray(planeVAO);

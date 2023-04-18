@@ -8,7 +8,7 @@ layout(std140) uniform Matrices{
     mat4 projection;
     mat4 view;
 };
-out vec2 TexCoord;
+out vec2 TexCoords;
 out vec3 FragPos;
 out mat3 TBN;
 
@@ -16,10 +16,13 @@ uniform mat4 model;
 
 void main(){
     gl_Position = projection*view*model*vec4(aPos,1.0);
-    TexCoord = aTexCoord;
+    TexCoords = aTexCoord;
     FragPos = vec3(model * vec4(aPos,1.0));
     vec3 T = normalize(vec3(model * vec4(aTangent,   0.0)));
-    vec3 B = normalize(vec3(model * vec4(aBitangent, 0.0)));
     vec3 N = normalize(vec3(model * vec4(aNormal,    0.0)));
+
+    T = normalize(T - dot(T,N)*N);
+    vec3 B = cross(N,T);
+    
     TBN = mat3(T, B, N);
 }

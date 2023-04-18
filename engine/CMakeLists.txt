@@ -12,3 +12,6 @@ add_subdirectory(source/runtime)
 
 # include_directories("${ENGINE_ROOT_DIR}/source")
 # include_path()
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/asset/ DESTINATION ${CMAKE_INSTALL_PREFIX}/asset)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shader/ DESTINATION ${CMAKE_INSTALL_PREFIX}/shader)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/configs/ DESTINATION ${CMAKE_INSTALL_PREFIX}/configs)

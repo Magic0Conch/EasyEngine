@@ -1,9 +1,9 @@
 #pragma once
-#include <GLFW/glfw3.h>
+#include "EngineWindow.h"
+// #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include "WindowTime.h"
 #include <iostream>
-#include "EngineWindow.h"
 namespace EasyEngine {
 
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -27,7 +27,7 @@ namespace EasyEngine {
 		};
 		glm::dvec3 buttonInputAxis;
 		glm::dvec3 mouseInputAxis;
-		bool gammaEnabled = false;
+		bool Gpressed = false;
 		bool closeWindow = false;
 
 	private:

@@ -83,7 +83,7 @@ void InputHandler::handleInput(GLFWwindow* window)
 	mouseInputAxis = mouseOffset;
 	//std::cout << mouseInputAxis.x << ":" << mouseInputAxis.y << ":" << mouseInputAxis.z << std::endl;
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !isPressedG) {
-		gammaEnabled = !gammaEnabled;
+		Gpressed = !Gpressed;
 		isPressedG = true;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE) {

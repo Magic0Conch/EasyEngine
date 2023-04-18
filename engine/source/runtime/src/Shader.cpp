@@ -21,7 +21,6 @@ bool Shader::validateShaderSourceByShaderIndex(int shaderIndex,const string type
 unsigned int Shader::readAndCompileShaderByFilename(const char* filename, unsigned int shaderType) {
 	//read and compile the vertex shader
 	std::string shaderSource = Utility::textFileRead(filename);
-	// cout<<shaderSource<<endl;
 	const char* shaderSourceCFormat = shaderSource.c_str();
 	unsigned int shader = glCreateShader(shaderType);
 	glShaderSource(shader, 1, &shaderSourceCFormat, NULL);

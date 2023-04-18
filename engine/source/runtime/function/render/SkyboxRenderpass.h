@@ -7,7 +7,7 @@
 namespace EasyEngine {
     class SkyboxRenderpass:public RenderPass{
         private:
-            uint VAO;
+            unsigned int VAO;
             shared_ptr<Texture> skyboxTexture;
             
         public:

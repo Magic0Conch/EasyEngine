@@ -8,7 +8,7 @@ namespace EasyEngine {
         private:
             std::vector<glm::vec2> translations;
         public:
-            uint VAO;
+            unsigned int VAO;
 
         public:
             InstancingTesting(const std::string& shaderPath);

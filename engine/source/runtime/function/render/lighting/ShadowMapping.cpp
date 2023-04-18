@@ -7,6 +7,7 @@
 #include "runtime/include/Shader.h"
 #include "runtime/resource/res_type/common/PostProcessingParameter.h"
 #include "runtime/resource/res_type/components/Camera.h"
+#include "runtime/resource/res_type/components/Texture.h"
 #include <memory>
 #include <string>
 
@@ -48,7 +49,7 @@ void ShadowMapping::initialize(){
 
     // load textures
     // -------------
-    floorTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/woodfloor.jpg"),GL_TEXTURE_2D,false);
+    floorTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/woodfloor.jpg"),GL_TEXTURE_2D,DEFAULT);
 
     //----
     glGenFramebuffers(1, &depthMapFBO);  

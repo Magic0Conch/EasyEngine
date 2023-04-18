@@ -10,7 +10,7 @@ namespace EasyEngine {
         private:
         public:
             const int samples = 4;
-            uint VAO,framebuffer,textureColorBufferMultiSampled,multisampledFBO,rbo,intermediateFBO,screenTexture;
+            unsigned int VAO,framebuffer,textureColorBufferMultiSampled,multisampledFBO,rbo,intermediateFBO,screenTexture;
             unsigned int cubeVAO, cubeVBO;
             unsigned int quadVAO, quadVBO;
 

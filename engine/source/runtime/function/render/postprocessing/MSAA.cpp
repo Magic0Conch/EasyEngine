@@ -5,8 +5,8 @@
 #include "runtime/include/EngineWindow.h"
 #include "runtime/include/WindowTime.h"
 #include "runtime/resource/res_type/components/Model.h"
-#include <GL/gl.h>
-#include <GL/glext.h>
+// #include <GL/gl.h>
+// #include <GL/glext.h>
 #include <cstddef>
 #include <cstdlib>
 #include <memory>

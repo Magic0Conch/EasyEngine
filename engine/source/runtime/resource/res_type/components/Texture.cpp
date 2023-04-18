@@ -3,7 +3,45 @@
 #include <string>
 
 namespace EasyEngine {
-    Texture::Texture(const std::string& path,const GLenum& textureType,bool gammaCorrection,bool inverseY){
+
+    void Texture::getTextureFormat(const int components,GLenum &outFormatInternal,GLenum &outFormatSource,const TextureInternalFormat targetFormat,const bool bgr){
+        switch (components) {
+            case 1:
+                outFormatInternal = GL_RED;//internalFormat 
+                outFormatSource = GL_RED;
+                break;
+            case 3:
+                switch (targetFormat) {
+                    case DEFAULT:
+                        outFormatInternal = GL_RGB;
+                        break;
+                    case GAMMACORRECTION:
+                        outFormatInternal = GL_SRGB;
+                        break;
+                    case HDR:
+                        outFormatInternal = GL_RGB16F;
+                        break;
+                }                
+                outFormatSource = bgr? GL_BGR:GL_RGB;
+                break;
+            case 4:
+                switch (targetFormat) {
+                    case DEFAULT:
+                        outFormatInternal = GL_RGBA;
+                        break;
+                    case GAMMACORRECTION:
+                        outFormatInternal = GL_SRGB_ALPHA;
+                        break;
+                    case HDR:
+                        outFormatInternal = GL_RGBA16F;
+                        break;
+                }
+                outFormatSource = bgr? GL_BGRA:GL_RGBA;
+                break;
+        }
+    }
+
+    Texture::Texture(const std::string& path,const GLenum& textureType,TextureInternalFormat internalFormat,bool inverseY){
         cv::Mat data = ImageProcessing::readImageByPath(path,IMREAD_UNCHANGED,inverseY);
         if (data.empty()) {
             cout << "Texture::Texture: load texture from "+path + " failed";
@@ -18,21 +56,9 @@ namespace EasyEngine {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
         GLenum format_target,format_source;
-        switch (data.channels()) {
-            case 1:
-                format_target = GL_RED;//internalFormat 
-                format_source = GL_RED;
-                break;
-            case 3:
-                format_target = gammaCorrection?GL_SRGB:GL_RGB;
-                format_source = GL_BGR;
-                break;
-            case 4:
-                format_target = gammaCorrection?GL_SRGB_ALPHA:GL_RGBA;
-                format_source = GL_BGRA;
-                break;
-        } 
+        getTextureFormat(data.channels(), format_target, format_source, internalFormat,true);
         glTexImage2D(GL_TEXTURE_2D,0,format_target,data.cols,data.rows,0,format_source,GL_UNSIGNED_BYTE,data.data);
         glGenerateMipmap(GL_TEXTURE_2D);
         data.release();
@@ -54,24 +80,24 @@ namespace EasyEngine {
                 return;
             }
             GLenum format_target,format_source;
-            switch (data.channels()) {
-                case 1:
-                    format_target = GL_RED;
-                    format_source = GL_RED;
-                    break;
-                case 3:
-                    format_target = GL_RGB;
-                    format_source = GL_BGR;
-                    break;
-                case 4:
-                    format_target = GL_RGBA;
-                    format_source = GL_BGRA;
-                    break;
-            } 
+            getTextureFormat(data.channels(), format_target, format_source, DEFAULT,true);
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + t++,0,format_target,data.cols,data.rows,0,format_source,GL_UNSIGNED_BYTE,data.data);
             data.release();
         }
     }
 
+
+
+    Texture::Texture(const int width,const int height,const int components,TextureInternalFormat internalFormat,bool inverseY,bool bgr){
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D,id);
+        GLenum format_internal,format_source;
+        getTextureFormat(components, format_internal, format_source, internalFormat,false);
+        glTexImage2D(GL_TEXTURE_2D,0,format_internal,width,height,0,format_source,GL_FLOAT,NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);        
+    }
 
 }

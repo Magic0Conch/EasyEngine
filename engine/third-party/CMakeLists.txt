@@ -14,9 +14,9 @@ add_subdirectory(${GLFW_LIB_NAME})
 # set(OPENCV_BUILD_JAVA    OFF CACHE BOOL "" FORCE)
 # set(OPENCV_BUILD_JPEG OFF CACHE BOOL "" FORCE)
 # set(OPENCV_BUILD_LIST "core,highgui,imgcodecs")
-# set(OPENCV_LIB_NAME "opencv")
+set(OPENCV_LIB_NAME "opencv")
 # set(OPENCV_INC_PATH ${OPENCV_LIB_NAME}/include)
-# add_subdirectory(${OPENCV_LIB_NAME})
+add_subdirectory(${OPENCV_LIB_NAME})
 
 #jsoncpp
 set(JSONCPP_LIB_NAME "jsoncpp")
@@ -66,7 +66,8 @@ target_include_directories(${GLAD_LIB_NAME}
 )
 
 # assimp
-# set(ASSIMP_LIB_NAME "assimp")
+set(ASSIMP_LIB_NAME "assimp")
+add_subdirectory(${ASSIMP_LIB_NAME})
 # set(ASSIMP_SRC_PATH "${ASSIMP_LIB_NAME}/src")
 # set(ASSIMP_INC_PATH "${ASSIMP_LIB_NAME}/include")
 

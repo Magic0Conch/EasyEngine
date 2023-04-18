@@ -80,7 +80,7 @@ namespace EasyEngine {
         glBindVertexArray(0);
         glEnable(GL_DEPTH_TEST);
     }
-    PostProcessingPass::PostProcessingPass(const std::string& shaderPath,std::shared_ptr<RenderPass> drawPass,uint drawPassFrameBuffer):RenderPass(shaderPath),framebuffer(-1),drawPass(drawPass){
+    PostProcessingPass::PostProcessingPass(const std::string& shaderPath,std::shared_ptr<RenderPass> drawPass,unsigned int drawPassFrameBuffer):RenderPass(shaderPath),framebuffer(-1),drawPass(drawPass){
 
     }
 }

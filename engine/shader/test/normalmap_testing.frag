@@ -1,7 +1,7 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec2 TexCoord;
+in vec2 TexCoords;
 in vec3 FragPos;
 in mat3 TBN;
 
@@ -19,7 +19,7 @@ vec3 blingPhone(){
     vec3 ansColor;
     vec3 ambientColor = light.lightColor*0.03;
 
-    vec3 normal = normalize(TBN * vec3(texture(normalmap,TexCoord)));
+    vec3 normal = normalize(TBN * vec3(texture(normalmap,TexCoords)));
     normal = normalize((normal*2.0)-1.0);
 
     vec3 frag2lightDir = normalize(light.lightPos - FragPos);
@@ -42,6 +42,6 @@ vec3 blingPhone(){
 
 void main()
 {             
-    vec3 texColor = vec3(texture(texture1, TexCoord));
+    vec3 texColor = vec3(texture(texture1, TexCoords));
     FragColor = vec4(texColor * blingPhone(),1.0);
 }

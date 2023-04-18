@@ -1,4 +1,7 @@
 #include "ConfigManager.h"
+#include "runtime/core/base/macro.h"
+#include <algorithm>
+#include <string>
 namespace EasyEngine {
     void ConfigManager::initialize(const std::string &config_file_path){
         // read configs    
@@ -12,6 +15,14 @@ namespace EasyEngine {
             {
                 std::string name  = configLine.substr(0, seperate_pos);
                 std::string value = configLine.substr(seperate_pos + 1, configLine.length() - seperate_pos - 1);
+                const std::string platform = getPlatformName();
+                if (platform == "windows") {
+                    std::replace(value.begin(),value.end(),'/','\\');
+                }
+                else if(platform == "linux"){
+                    std::replace(value.begin(),value.end(),'\\','/');
+                }
+
                 const std::string fullPath = PathUtility::getFullPath(parentPath,value);
                 if (name == "BinaryRootFolder")
                 {

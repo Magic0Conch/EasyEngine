@@ -18,7 +18,7 @@ namespace EasyEngine{
             Assimp::Importer importer;
             //transform all the model's primitive shapeds to triangles first.
             //filps the texture coordinates on the y-axis
-            const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs);
+            const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs|aiProcess_CalcTangentSpace);
             if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
                 cout<< "ERROR::ASSIMP::"<<importer.GetErrorString()<<endl;
                 return;
@@ -36,9 +36,7 @@ namespace EasyEngine{
         }
 
         void Model::processNode(aiNode *node,const aiScene *scene){
-                        // for (int i = 0; i<meshes.size(); ++i) {
-                cout<<loadedCount++<<"/"<<scene->mNumMeshes<<endl;
-            // }
+            cout<<loadedCount++<<"/"<<scene->mNumMeshes<<endl;
             for (unsigned int i = 0; i<node->mNumMeshes; ++i) {
                 aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
                 meshes.emplace_back(processMesh(mesh,scene));
@@ -62,6 +60,8 @@ namespace EasyEngine{
                 else {
                     vertex.texCoords = glm::vec2(0);
                 }
+                vertex.tangent = glm::vec3(mesh->mTangents[i].x,mesh->mTangents[i].y,mesh->mTangents[i].z);
+                vertex.biTangent = glm::vec3(mesh->mBitangents[i].x,mesh->mBitangents[i].y,mesh->mBitangents[i].z);
                 vertices.emplace_back(vertex);            
             }
             for (unsigned int i = 0; i<mesh->mNumFaces; ++i) {
@@ -81,7 +81,7 @@ namespace EasyEngine{
         }
         vector<Texture> Model::loadMaterialTextures(aiMaterial *mat,aiTextureType type,string typeName){
             vector<Texture> textures;
-            for (uint i = 0; i<mat->GetTextureCount(type); ++i) {
+            for (unsigned int i = 0; i<mat->GetTextureCount(type); ++i) {
                 aiString str;
                 mat->GetTexture(type, i, &str);
                 bool skip = false;
@@ -95,7 +95,7 @@ namespace EasyEngine{
                 if (skip) {
                     continue;
                 }
-                Texture texture(PathUtility::getFullPath(directory, str.C_Str()),GL_TEXTURE_2D,false,true);                
+                Texture texture(PathUtility::getFullPath(directory, str.C_Str()),GL_TEXTURE_2D,DEFAULT,true);
                 texture.type = typeName;
                 texture.path = str.C_Str();
                 textures.emplace_back(texture);

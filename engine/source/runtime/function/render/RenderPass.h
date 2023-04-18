@@ -20,12 +20,13 @@ namespace EasyEngine {
         Json::Value sceneConfig;
         glm::mat4 model = glm::mat4(1.0);
         std::shared_ptr<Shader> shader;
-        uint uniformBlockIndex;
+        unsigned int uniformBlockIndex;
         std::vector<std::shared_ptr<PostProcessingParameter> > parameters;
     public:
         virtual void initialize()=0;
         virtual void draw(Camera& camera)=0;
         RenderPass(const std::string& shaderPath);
+        RenderPass(const std::string& vertpath,const std::string& fragpath);
         RenderPass(const std::string& vertpath,const std::string& geompath,const std::string& fragpath);
         RenderPass();
     };

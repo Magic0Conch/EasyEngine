@@ -12,7 +12,7 @@ VisualizeNormalVectors::VisualizeNormalVectors(const string& shaderPath,const st
     ,PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), normalDisplayShaderPath+".frag").c_str()
     );
 
-    uint blockIndex = glGetUniformBlockIndex(normalDisplayShader->ID,"Matrices");
+    unsigned int blockIndex = glGetUniformBlockIndex(normalDisplayShader->ID,"Matrices");
     glUniformBlockBinding(normalDisplayShader->ID,blockIndex,0);
 }
 

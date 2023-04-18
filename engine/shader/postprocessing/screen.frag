@@ -2,7 +2,7 @@
 
 out vec4 FragColor;
 
-in vec2 TexCoord;
+in vec2 TexCoords;
 uniform sampler2D texture1;
 
 const float offset = 1.0 / 300.0;  
@@ -32,7 +32,7 @@ vec3 multiKernel(vec3 sourceColor,float kernel[9]){
 
     vec3 sampleTex[9];
     for(int i = 0;i<9;++i){
-        sampleTex[i]=vec3(texture(texture1,TexCoord.st+offsets[i]));
+        sampleTex[i]=vec3(texture(texture1,TexCoords.st+offsets[i]));
     }
     vec3 col = vec3(0.0);
     for(int i = 0;i<9;++i){
@@ -69,6 +69,6 @@ vec3 edge(vec3 sourceColor){
 }
 
 void main(){
-    vec3 col = texture(texture1,TexCoord).rgb;
+    vec3 col = texture(texture1,TexCoords).rgb;
     FragColor = vec4(col,1.0);
 }

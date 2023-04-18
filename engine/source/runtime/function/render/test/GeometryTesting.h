@@ -4,7 +4,7 @@
 namespace EasyEngine {
     class GeometryTesting: public RenderPass{
         public:
-            uint VAO;
+            unsigned int VAO;
 
         public:
             GeometryTesting(const std::string& vertShaderPath,const std::string& geomShaderPath,const std::string& fragShaderPath);

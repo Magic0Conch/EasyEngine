@@ -2,7 +2,7 @@
 
 out vec4 FragColor;
 
-in vec2 TexCoord;
+in vec2 TexCoords;
 uniform sampler2D texture1;
 uniform float near_plane;
 uniform float far_plane;
@@ -14,7 +14,7 @@ float LinearizeDepth(float depth)
 }
 
 void main(){
-    float depth = texture(texture1,TexCoord).r;
+    float depth = texture(texture1,TexCoords).r;
     // FragColor = vec4(vec3(LinearizeDepth(depth) / far_plane), 1.0); // perspective
     FragColor = vec4(vec3(depth),1.0);
 }

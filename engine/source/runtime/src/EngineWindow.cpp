@@ -1,5 +1,6 @@
 #include "../include/EngineWindow.h"
-#include <GL/gl.h>
+#include "GLFW/glfw3.h"
+#include <cstdio>
 
 using namespace EasyEngine;
 
@@ -24,14 +25,20 @@ void EngineWindow::framebufferSizeCallback(GLFWwindow* window, int width, int he
 }
 
 void EngineWindow::createWindow(){
-    glfwInit(); //initialize GLFW
+    if (!glfwInit()) {
+        const char* msg;
+        glfwGetError(&msg);
+        printf("Error: %s \n", msg);
+    }
+    
+    
     //configure the options prefixed with GLFW_
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //anti aliasing
     glfwWindowHint(GLFW_SAMPLES, 4);
-    glEnable(GL_MULTISAMPLE);
+    // glEnable(GL_MULTISAMPLE);
     
     //create the window
     window = glfwCreateWindow(EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight,  "Rasterization", NULL, NULL);//window witdth,height,name
@@ -43,7 +50,7 @@ void EngineWindow::createWindow(){
     //tell GLFW to make the context of our window the main context on the current threaed
     glfwMakeContextCurrent(window);
 
-    glViewport(0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight);//position, size(in pixels)
+    // glViewport(0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight);//position, size(in pixels)
     // glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 }

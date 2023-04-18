@@ -25,3 +25,10 @@ RenderPass::RenderPass(const std::string& vertpath,const std::string& geompath,c
 RenderPass::RenderPass(){
 
 }
+
+RenderPass::RenderPass(const std::string& vertpath,const std::string& fragpath){
+    shader = std::make_shared<Shader>(PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), vertpath+".vert").c_str()
+            ,PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), fragpath+".frag").c_str());
+    uniformBlockIndex = glGetUniformBlockIndex(shader->ID,"Matrices");
+    glUniformBlockBinding(shader->ID,uniformBlockIndex,0);
+}

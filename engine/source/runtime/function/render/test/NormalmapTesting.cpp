@@ -8,7 +8,7 @@
 #include "runtime/function/render/RenderPass.h"
 #include "runtime/include/Shader.h"
 #include "runtime/include/WindowTime.h"
-#include <GL/gl.h>
+// #include <GL/gl.h>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -30,55 +30,18 @@ namespace EasyEngine {
         // normal vector
         glm::vec3 nm(0.0f, 0.0f, 1.0f);
 
-        // calculate tangent/bitangent vectors of both triangles
-        glm::vec3 tangent1, bitangent1;
-        glm::vec3 tangent2, bitangent2;
-        // triangle 1
-        // ----------
-        glm::vec3 edge1 = pos2 - pos1;
-        glm::vec3 edge2 = pos3 - pos1;
-        glm::vec2 deltaUV1 = uv2 - uv1;
-        glm::vec2 deltaUV2 = uv3 - uv1;
-
-        float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-        tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-        tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-
-        bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-        bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-        bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-
-        // triangle 2
-        // ----------
-        edge1 = pos3 - pos1;
-        edge2 = pos4 - pos1;
-        deltaUV1 = uv3 - uv1;
-        deltaUV2 = uv4 - uv1;
-
-        f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
-
-        tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-        tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-        tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
-
-
-        bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-        bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-        bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
 
         glm::mat2x3 TB1 = getTB(pos1, pos2, pos3, uv1, uv2, uv3);
         glm::mat2x3 TB2 = getTB(pos1, pos3, pos4, uv1, uv3, uv4);
         float quadVertices[] = {
             // positions            // normal         // texcoords  // tangent                          // bitangent
-            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-            pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
-            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent1.x, tangent1.y, tangent1.z, bitangent1.x, bitangent1.y, bitangent1.z,
+            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, TB1[0][0], TB1[0][1], TB1[0][2], TB1[1][0], TB1[1][1], TB1[1][2],
+            pos2.x, pos2.y, pos2.z, nm.x, nm.y, nm.z, uv2.x, uv2.y, TB1[0][0], TB1[0][1], TB1[0][2], TB1[1][0], TB1[1][1], TB1[1][2],
+            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, TB1[0][0], TB1[0][1], TB1[0][2], TB1[1][0], TB1[1][1], TB1[1][2],
 
-            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
-            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z,
-            pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, tangent2.x, tangent2.y, tangent2.z, bitangent2.x, bitangent2.y, bitangent2.z
+            pos1.x, pos1.y, pos1.z, nm.x, nm.y, nm.z, uv1.x, uv1.y, TB2[0][0], TB2[0][1], TB2[0][2], TB2[1][0], TB2[1][1], TB2[1][2],
+            pos3.x, pos3.y, pos3.z, nm.x, nm.y, nm.z, uv3.x, uv3.y, TB2[0][0], TB2[0][1], TB2[0][2], TB2[1][0], TB2[1][1], TB2[1][2],
+            pos4.x, pos4.y, pos4.z, nm.x, nm.y, nm.z, uv4.x, uv4.y, TB2[0][0], TB2[0][1], TB2[0][2], TB2[1][0], TB2[1][1], TB2[1][2]
         };
         // configure plane VAO
         glGenVertexArrays(1, &cubeVAO);
@@ -141,9 +104,10 @@ namespace EasyEngine {
         float frac = 1.0/(deltaUV1.x*deltaUV2.y - deltaUV2.x*deltaUV1.y)  ;
         glm::vec3 T,B;
         
-        glm::mat2 deltaMat(deltaUV2.y,deltaUV2.x,-deltaUV1.y,deltaUV1.x);
+        glm::mat2 deltaMat(deltaUV2.y,-deltaUV1.y,-deltaUV2.x,deltaUV1.x);
         glm::mat2x3 E(edge1,edge2);
-        glm::mat2x3 TB = E*deltaMat;
+        glm::mat2x3 TB = E*deltaMat*frac;
+        //Tangent = TB[0] ; Bitangent = TB[1];
         return TB;
     }
 
@@ -155,10 +119,11 @@ namespace EasyEngine {
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, cubenormalTexture->id);
 
-        lightPos = glm::vec3(2*cos(WindowTime::currentTimeValue),0,2*sin(WindowTime::currentTimeValue));
+        lightPos = glm::vec3(0*cos(WindowTime::currentTimeValue),0,0*sin(WindowTime::currentTimeValue));
 
         //light cube
         colorShader->use();
+        model = glm::mat4(1);
         model = glm::translate(model, glm::vec3(lightPos));
         model = glm::scale(model, glm::vec3(0.2));
         colorShader->setValue("model",model);
@@ -175,10 +140,12 @@ namespace EasyEngine {
         //scene cube
         model = glm::mat4(1.0);
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+        model = glm::rotate(model, (float)WindowTime::currentTimeValue, glm::vec3(0,1,0));
         shader->setValue("model",model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, (float)WindowTime::currentTimeValue*2, glm::vec3(0,1,0));
         shader->setValue("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }

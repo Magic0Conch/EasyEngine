@@ -12,7 +12,7 @@ namespace EasyEngine {
             std::vector<glm::mat4> rockModels;
             std::shared_ptr<Model> rockModel, planetModel;
         public:
-            uint VAO;
+            unsigned int VAO;
 
         public:
             AsteroidField(const std::string& shaderPath);

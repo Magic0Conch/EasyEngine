@@ -7,11 +7,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #export config to clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # include(CMakeDependentOption)
-
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+if(MSVC)
+endif()
 if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
-
+# add_definitions(-DBOOST_THREAD_USE_LIB)
 set(EASYENGINE_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(EASYENGINE_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build")
 set(CMAKE_INSTALL_PREFIX "${EASYENGINE_BUILD_DIR}/bin")

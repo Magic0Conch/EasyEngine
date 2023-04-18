@@ -6,10 +6,10 @@
 namespace EasyEngine {
     class PostProcessingPass:public RenderPass{
         private:
-            uint framebuffer;
-            uint textureColorBuffer;
-            uint renderbuffer;
-            uint quadVAO;
+            unsigned int framebuffer;
+            unsigned int textureColorBuffer;
+            unsigned int renderbuffer;
+            unsigned int quadVAO;
             std::shared_ptr<RenderPass> drawPass;
             
             // bool withFramebuffer = false;
@@ -17,7 +17,7 @@ namespace EasyEngine {
         public:
             virtual void initialize();
             virtual void draw(Camera& camera);
-            PostProcessingPass(const std::string& shaderPath, std::shared_ptr<RenderPass> drawPass,uint drawPassFrameBuffer = -1);
+            PostProcessingPass(const std::string& shaderPath, std::shared_ptr<RenderPass> drawPass,unsigned int drawPassFrameBuffer = -1);
 
     };
 

@@ -49,12 +49,12 @@ namespace EasyEngine {
         // shader->setValue("model", model);
         planetModel->draw(*shader);
 
-        uint buffer;
+        unsigned int buffer;
         glBindBuffer(GL_ARRAY_BUFFER,buffer);
         glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &rockModels[0], GL_STATIC_DRAW);
 
         for (int i = 0; i<rockModel->meshes.size(); ++i) {
-            uint VAO = rockModel->meshes[i].VAO;
+            unsigned int VAO = rockModel->meshes[i].VAO;
             glBindVertexArray(VAO);
             glEnableVertexAttribArray(3);
             glVertexAttribPointer(3,4,GL_FLOAT,GL_FALSE,4*sizeof(glm::vec4),(void*)0);

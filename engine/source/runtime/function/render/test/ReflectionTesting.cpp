@@ -5,7 +5,7 @@
 #include "runtime/function/global/global_context.h"
 #include "runtime/function/render/RenderPass.h"
 #include "runtime/include/Shader.h"
-#include <GL/gl.h>
+// #include <GL/gl.h>
 #include <map>
 #include <memory>
 #include <string>

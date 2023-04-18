@@ -25,4 +25,10 @@ namespace EasyEngine {
         PostProcessingParameterInt(const std::string& name,int val);
     };
 
+    class PostProcessingParameterUInt:public PostProcessingParameter{
+    public:
+        unsigned int value;
+        virtual void setShaderParameter(Shader& shader);
+        PostProcessingParameterUInt(const std::string& name,unsigned int val);
+    };
 }
