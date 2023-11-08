@@ -14,9 +14,6 @@
 ![20231107224253](https://cdn.jsdelivr.net/gh/Magic0Conch/gallery/blogs/pictures/20231107224253.png)
 
 
-### SSAO
-![20231107224503](https://cdn.jsdelivr.net/gh/Magic0Conch/gallery/blogs/pictures/20231107224503.png)
-
 
 ### 延迟渲染
 ![20231107224741](https://cdn.jsdelivr.net/gh/Magic0Conch/gallery/blogs/pictures/20231107224741.png)
@@ -43,3 +40,12 @@
 
 ### 折射与天空盒
 ![20231107225601](https://cdn.jsdelivr.net/gh/Magic0Conch/gallery/blogs/pictures/20231107225601.png)
+
+
+### GPU Instance
+![20231108102941](https://cdn.jsdelivr.net/gh/Magic0Conch/gallery/blogs/pictures/20231108102941.png)
+
+### SSAO
+![20231107224503](https://cdn.jsdelivr.net/gh/Magic0Conch/gallery/blogs/pictures/20231107224503.png)
+
+
