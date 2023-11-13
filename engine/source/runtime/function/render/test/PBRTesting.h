@@ -7,11 +7,17 @@
 #include <sys/types.h>
 namespace EasyEngine {
     class PBRTesting:public RenderPass{
+    public:
+        PBRTesting(const std::string shaderPath);
+        virtual void initialize();
+        virtual void draw(Camera& camera);
+        ~PBRTesting();
     private:
         int nrRows = 7;
         int nrColumns = 7;
         float spacing = 2.5;
         unsigned int captureFBO, captureRBO,envCubemap,irradianceMap;
+        unsigned int prefilterMap;
     private:
         unsigned int textureHDR;
         shared_ptr<Texture> albedoMap;
@@ -26,10 +32,5 @@ namespace EasyEngine {
 
         vector<glm::vec3> lightPositions,lightColors;
         const int width,height;
-    public:
-        PBRTesting(const std::string shaderPath);
-        virtual void initialize();
-        virtual void draw(Camera& camera);
-        ~PBRTesting();
     };
 }

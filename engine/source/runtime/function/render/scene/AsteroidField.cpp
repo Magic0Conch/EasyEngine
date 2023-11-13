@@ -50,6 +50,7 @@ namespace EasyEngine {
         planetModel->draw(*shader);
 
         unsigned int buffer;
+        glGenBuffers(1,&buffer);
         glBindBuffer(GL_ARRAY_BUFFER,buffer);
         glBufferData(GL_ARRAY_BUFFER, amount * sizeof(glm::mat4), &rockModels[0], GL_STATIC_DRAW);
 
@@ -59,6 +60,7 @@ namespace EasyEngine {
             glEnableVertexAttribArray(3);
             glVertexAttribPointer(3,4,GL_FLOAT,GL_FALSE,4*sizeof(glm::vec4),(void*)0);
             glEnableVertexAttribArray(4);
+            
             glVertexAttribPointer(4,4,GL_FLOAT,GL_FALSE,4*sizeof(glm::vec4),(void*)(1 * sizeof(glm::vec4)));
             glEnableVertexAttribArray(5);
             glVertexAttribPointer(5,4,GL_FLOAT,GL_FALSE,4*sizeof(glm::vec4),(void*)(2 * sizeof(glm::vec4)));

@@ -15,6 +15,7 @@ uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
+uniform samplerCube irradianceMap;
 
 struct Light{
     vec3 Position;
@@ -97,7 +98,7 @@ void main(){
         float NdotV = max(0.0,dot(normal,frag2view));
         float NdotL = max(0.0,dot(normal,frag2light));
 
-        vec3 F = fresnelSchlick(F_0,HdotV); //TODO: why not dot(normal,frag2view)
+        vec3 F = fresnelSchlick(F_0,HdotV); 
         float NDF = distributionGGXXTR(roughness,NdotH);
         float G = geomertrySmith(normal,frag2light,frag2view,roughness);
 
@@ -109,8 +110,13 @@ void main(){
         kD*=1.0-metallic;
         L_o+=(kD*albedo/PI + specualrColor)*L_i*NdotL;
     }
-    vec3 ambientColor = ao * albedo * vec3(0.03);
-    vec3 outColor = ambientColor + L_o;
+    vec3 kS = fresnelSchlick(F_0,max(0,dot(normal,frag2view)));
+    vec3 kD = 1.0-kS;
+    vec3 irradiance = texture(irradianceMap,normal).rgb;
+    vec3 diffuse = irradiance*albedo;
+    vec3 ambient = kD*diffuse*ao;
+    // vec3 ambientColor = ao * albedo * ambient;
+    vec3 outColor = ambient + L_o;
     //HDR
     outColor = outColor/(outColor + vec3(1.0));
     //gamma correct

@@ -37,12 +37,8 @@ PBRTesting::~PBRTesting(){
 }
 
 void PBRTesting::initialize(){
-    glCheckError();
-
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL); 
-    glCheckError();
-
     glGenFramebuffers(1, &captureFBO);
     glGenRenderbuffers(1, &captureRBO);
 
@@ -50,16 +46,12 @@ void PBRTesting::initialize(){
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
-    glCheckError();
-
     glGenTextures(1, &envCubemap);
     glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
     for (unsigned int i = 0; i < 6; ++i){
         // note that we store each face with 16 bit floating point values
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
     }
-    glCheckError();
-
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -176,6 +168,18 @@ void PBRTesting::initialize(){
                             GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, irradianceMap, 0);
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     glViewport(0,0,width,height);
+
+    glGenTextures(1,&prefilterMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,prefilterMap);
+    for (unsigned int i = 0; i<6; i++) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X+i,0,GL_RGB16F,128,128,0,GL_RGB,GL_FLOAT,nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 }
 
 void PBRTesting::draw(Camera &camera){
@@ -193,7 +197,9 @@ void PBRTesting::draw(Camera &camera){
     glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D, aoMap->id);
     glm::mat4 model = glm::mat4(1.0f);
-
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+    shader->setValue("irradianceMap",5);
     for (unsigned int i = 0; i < lightPositions.size(); i++){
         shader->setValue("lights[" + std::to_string(i) + "].Position", lightPositions[i]);
         shader->setValue("lights[" + std::to_string(i) + "].Color", lightColors[i]);

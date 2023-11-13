@@ -50,6 +50,8 @@ namespace EasyEngine {
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);
         //set the texture wrapping/filtering options (on the currently bound texture object)
+// "E:/Files/Work/Project/EasyEngine/build/bin/\\asset\\data\\planet\\mars.png"
+//"E:/Files/Work/Project/EasyEngine/build/bin/\\asset\\texture\\default/marble.bmp"
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         
@@ -58,6 +60,8 @@ namespace EasyEngine {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         GLenum format_target,format_source;
+        int x= data.channels();
+        int y = data.cols;
         getTextureFormat(data.channels(), format_target, format_source, internalFormat,true);
         glTexImage2D(GL_TEXTURE_2D,0,format_target,data.cols,data.rows,0,format_source,GL_UNSIGNED_BYTE,data.data);
         glGenerateMipmap(GL_TEXTURE_2D);

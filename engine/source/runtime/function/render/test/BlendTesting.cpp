@@ -119,9 +119,9 @@ namespace EasyEngine {
         vegetation.push_back(glm::vec3(-0.3f,  0.0f, -2.3f));
         vegetation.push_back(glm::vec3( 0.5f,  0.0f, -0.6f));  
 
-        cubeTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/marble.bmp"));
-        floorTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/metal.jpg"));
-        grassTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/grass.png"));
+        floorTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default\\metal.jpg"));
+        grassTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default\\grass.png"));
+        cubeTexture = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default\\marble.bmp"));
         glBindTexture(GL_TEXTURE_2D,grassTexture->id);
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
