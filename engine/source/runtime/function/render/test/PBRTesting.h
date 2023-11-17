@@ -2,6 +2,7 @@
 #include "glm/fwd.hpp"
 #include "runtime/function/render/GeometryRenderpass.h"
 #include "runtime/function/render/RenderPass.h"
+#include "runtime/include/Shader.h"
 #include "runtime/resource/res_type/components/Texture.h"
 #include <memory>
 #include <sys/types.h>
@@ -18,6 +19,7 @@ namespace EasyEngine {
         float spacing = 2.5;
         unsigned int captureFBO, captureRBO,envCubemap,irradianceMap;
         unsigned int prefilterMap;
+        unsigned int envCubemapMipmap;
     private:
         unsigned int textureHDR;
         shared_ptr<Texture> albedoMap;
@@ -29,6 +31,7 @@ namespace EasyEngine {
         shared_ptr<Shader> shaderEquirect;
         shared_ptr<Shader> shaderSkybox;
         shared_ptr<Shader> shaderIrradiance;
+        unique_ptr<Shader> prefilterShader;
 
         vector<glm::vec3> lightPositions,lightColors;
         const int width,height;

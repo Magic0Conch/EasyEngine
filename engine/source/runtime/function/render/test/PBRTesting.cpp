@@ -9,6 +9,7 @@
 #include "runtime/resource/res_type/components/Texture.h"
 // #include <GL/gl.h>
 // #include <GL/glext.h>
+#include <cmath>
 #include <cstddef>
 #include <iostream>
 #include <memory>
@@ -30,10 +31,27 @@ PBRTesting::PBRTesting(const std::string shaderPath):RenderPass(shaderPath),widt
     shaderIrradiance = std::make_shared<Shader>(PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), "common/equirect_cubemap.vert").c_str()
             ,PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), "test/cubemap_convolution.frag").c_str());
         glCheckError();
+    prefilterShader = std::make_unique<Shader>(PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), "common/equirect_cubemap.vert").c_str()
+            ,PU::getFullPath(g_global_context.m_config_manager->getShaderFolder(), "test/cubemap_convolution_specular.frag").c_str());
 }
 
 PBRTesting::~PBRTesting(){
 
+}
+
+void generateCubeMap(unsigned int& cubemap,int width,int height){
+    glGenTextures(1, &cubemap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
+    for (unsigned int i = 0; i < 6; ++i){
+        // note that we store each face with 16 bit floating point values
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glCheckError();
 }
 
 void PBRTesting::initialize(){
@@ -46,18 +64,9 @@ void PBRTesting::initialize(){
     glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
-    glGenTextures(1, &envCubemap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-    for (unsigned int i = 0; i < 6; ++i){
-        // note that we store each face with 16 bit floating point values
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
-    }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glCheckError();
+
+    generateCubeMap(envCubemap,512,512);
+    generateCubeMap(envCubemapMipmap,128,128);
 
     cv::Mat data = ImageProcessing::readImageByPath(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "skybox/newport_loft.hdr"),IMREAD_UNCHANGED,true);
     glGenTextures(1,&textureHDR);
@@ -99,8 +108,7 @@ void PBRTesting::initialize(){
     }
     glBindFramebuffer(GL_FRAMEBUFFER,0);
 
-
-    glCheckError();
+    
 
     const unsigned int NR_LIGHTS = 1;
     for (unsigned int i = 0; i < NR_LIGHTS; i++)
@@ -143,7 +151,49 @@ void PBRTesting::initialize(){
     glCheckError();
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
     glCheckError();
-    
+
+    glGenTextures(1,&prefilterMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,prefilterMap);
+    for (unsigned int i = 0; i<6; i++) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X+i,0,GL_RGB16F,128,128,0,GL_RGB,GL_FLOAT,nullptr);
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
+    /*prefilter*/
+    prefilterShader->use();
+    prefilterShader->setValue("environmentMap",0);
+    prefilterShader->setValue("projection",captureProjection);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,envCubemapMipmap);
+    glBindFramebuffer(GL_FRAMEBUFFER,captureFBO);
+    unsigned int maxMipLevels = 5;
+    for (unsigned int mip = 0; mip<maxMipLevels; mip++) {
+        unsigned int mipWidth = 128*pow(0.5,mip);
+        unsigned int mipHeight = 128*pow(0.5,mip);
+        glBindRenderbuffer(GL_RENDERBUFFER,captureRBO);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
+        glViewport(0,0,mipHeight,mipHeight);
+
+        float roughness = (float)mip/(float)(maxMipLevels-1);
+        prefilterShader->setValue("roughness",roughness);
+        for (unsigned int i = 0; i < 6; ++i){
+            prefilterShader->setValue("view",captureViews[i]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
+                                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterMap, mip);
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+            RenderShape::instance().renderCube();
+            
+        }
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+
+
+    /*diffuse image ibl*/
     shaderIrradiance->use();
     shaderIrradiance->setValue("environmentMap",0);
     shaderIrradiance->setValue("projection",captureProjection);
@@ -164,22 +214,12 @@ void PBRTesting::initialize(){
         
     }
         // shaderIrradiance->setValue("view",glm::lookAt(glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,0.0f,0.0f), glm::vec3(0.0f,-1.0f,0.0f)));
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
-                            GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, irradianceMap, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 
+                        GL_TEXTURE_CUBE_MAP_POSITIVE_X + 3, irradianceMap, 0);
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     glViewport(0,0,width,height);
 
-    glGenTextures(1,&prefilterMap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP,prefilterMap);
-    for (unsigned int i = 0; i<6; i++) {
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X+i,0,GL_RGB16F,128,128,0,GL_RGB,GL_FLOAT,nullptr);
-    }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); 
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
 }
 
 void PBRTesting::draw(Camera &camera){
@@ -223,7 +263,7 @@ void PBRTesting::draw(Camera &camera){
         }
     }
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP,irradianceMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,envCubemapMipmap);
     shaderSkybox->use();
     RenderShape::instance().renderCube();
     
