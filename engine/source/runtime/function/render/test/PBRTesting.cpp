@@ -295,6 +295,11 @@ void PBRTesting::draw(Camera &camera){
     glm::mat4 model = glm::mat4(1.0f);
     glActiveTexture(GL_TEXTURE5);
     glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+    glActiveTexture(GL_TEXTURE6);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
+    glActiveTexture(GL_TEXTURE7);
+    glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
+
     shader->setValue("irradianceMap",5);
     for (unsigned int i = 0; i < lightPositions.size(); i++){
         shader->setValue("lights[" + std::to_string(i) + "].Position", lightPositions[i]);

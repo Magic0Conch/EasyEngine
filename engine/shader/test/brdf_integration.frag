@@ -2,7 +2,7 @@
 out vec2 FragColor;
 in vec3 localPos;
 in vec2 TexCoords;
-
+const float PI = 3.1415926535;
 float RadicalInverse_VdC(uint bits) 
 {
     bits = (bits << 16u) | (bits >> 16u);

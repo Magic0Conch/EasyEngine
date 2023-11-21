@@ -49,6 +49,10 @@ vec3 fresnelSchlick(vec3 F_0,float cosTheta){
     return F_0 + (1.0 - F_0)*pow(clamp(1.0 - cosTheta,0.0,1.0),5.0);
 }
 
+vec3 fresnelSchlickRoughness(vec3 F_0,float cosTheta,float roughness){
+    return F_0 + (max(vec3(1.0 - roughness), F_0) - F_0)*pow(clamp(1.0-cosTheta,0.0,1.0),5.0);
+}
+
 float distributionGGXXTR(float roughness ,float cosTheta){ //N H
     float num = roughness*roughness;
     float denom = PI*pow((cosTheta*cosTheta*(num*num-1.0)+1.0),2);
@@ -84,7 +88,7 @@ void main(){
     vec3 normal = getNormalFromMap();
     vec3 frag2view = normalize(vec3(ViewPos-FragPos));
     vec3 R = reflect(-frag2view,normal);
-
+    float NdotV = max(0.0,dot(normal,frag2view));
     vec3 F_0 = mix(vec3(0.04),albedo,metallic);
     vec3 L_o = vec3(0.0);
     for(int i = 0;i<NR_LIGHTS;++i){
@@ -99,7 +103,7 @@ void main(){
 
         float HdotV=max(0.0,dot(h,frag2view));
         float NdotH = max(0.0,dot(h,normal));
-        float NdotV = max(0.0,dot(normal,frag2view));
+
         float NdotL = max(0.0,dot(normal,frag2light));
 
         vec3 F = fresnelSchlick(F_0,HdotV); 
@@ -115,7 +119,8 @@ void main(){
         kD*=1.0-metallic;
         L_o+=(kD*albedo/PI + specualrColor)*L_i*NdotL;
     }
-    vec3 kS = fresnelSchlick(F_0,max(0,dot(normal,frag2view))); //todo F with roughness
+    vec3 F = fresnelSchlickRoughness(F_0,max(0,dot(normal,frag2view)),roughness);
+    vec3 kS = F; //todo F with roughness
     vec3 kD = 1.0-kS;
     kD*=1.0-metallic;
 
@@ -124,17 +129,16 @@ void main(){
 
     /*specular begin*/
     const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilterColor = textureLod(prefilterMap,R,roughness*MAX_REFLECTION_LOD);
+    vec3 prefilterColor = textureLod(prefilterMap,R,roughness*MAX_REFLECTION_LOD).rgb;
 
 
-    vec3 F_1; //todo
-    vec2 envBRDF = texture(brdfLUT,NdotV,roughness);
-    vec3 specualrColor = prefilterColor*(F_1*envBRDF.x+envBRDF.y);
+    vec2 envBRDF = texture(brdfLUT,vec2(max(NdotV,0.0),roughness)).rg;
+    vec3 specualrColor = prefilterColor*(F*envBRDF.x+envBRDF.y);
     /*specular end*/
 
-    vec3 ambient = (kD*diffuse + L_o)*ao;
+    vec3 ambient = (kD*diffuse + specualrColor)*ao;
     // vec3 ambientColor = ao * albedo * ambient;
-    vec3 outColor = ambient;
+    vec3 outColor = ambient + L_o;
     //HDR
     outColor = outColor/(outColor + vec3(1.0));
     //gamma correct
