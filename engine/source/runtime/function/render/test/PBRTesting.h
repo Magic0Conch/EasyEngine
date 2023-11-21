@@ -20,6 +20,7 @@ namespace EasyEngine {
         unsigned int captureFBO, captureRBO,envCubemap,irradianceMap;
         unsigned int prefilterMap;
         unsigned int envCubemapMipmap;
+        unsigned int brdfLUTTexture;
     private:
         unsigned int textureHDR;
         shared_ptr<Texture> albedoMap;
@@ -32,6 +33,7 @@ namespace EasyEngine {
         shared_ptr<Shader> shaderSkybox;
         shared_ptr<Shader> shaderIrradiance;
         unique_ptr<Shader> prefilterShader;
+        unique_ptr<Shader> brdfShader;
 
         vector<glm::vec3> lightPositions,lightColors;
         const int width,height;

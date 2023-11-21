@@ -16,6 +16,8 @@ uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
 uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfLUT;
 
 struct Light{
     vec3 Position;
@@ -81,6 +83,8 @@ void main(){
 
     vec3 normal = getNormalFromMap();
     vec3 frag2view = normalize(vec3(ViewPos-FragPos));
+    vec3 R = reflect(-frag2view,normal);
+
     vec3 F_0 = mix(vec3(0.04),albedo,metallic);
     vec3 L_o = vec3(0.0);
     for(int i = 0;i<NR_LIGHTS;++i){
@@ -103,6 +107,7 @@ void main(){
         float G = geomertrySmith(normal,frag2light,frag2view,roughness);
 
         vec3 specualrColor = calcSpecular(NDF,F,G,NdotV,NdotL);
+
         // calc diffuse
         vec3 kS = F;
         vec3 kD = vec3(1.0) - kS;
@@ -110,13 +115,26 @@ void main(){
         kD*=1.0-metallic;
         L_o+=(kD*albedo/PI + specualrColor)*L_i*NdotL;
     }
-    vec3 kS = fresnelSchlick(F_0,max(0,dot(normal,frag2view)));
+    vec3 kS = fresnelSchlick(F_0,max(0,dot(normal,frag2view))); //todo F with roughness
     vec3 kD = 1.0-kS;
+    kD*=1.0-metallic;
+
     vec3 irradiance = texture(irradianceMap,normal).rgb;
     vec3 diffuse = irradiance*albedo;
-    vec3 ambient = kD*diffuse*ao;
+
+    /*specular begin*/
+    const float MAX_REFLECTION_LOD = 4.0;
+    vec3 prefilterColor = textureLod(prefilterMap,R,roughness*MAX_REFLECTION_LOD);
+
+
+    vec3 F_1; //todo
+    vec2 envBRDF = texture(brdfLUT,NdotV,roughness);
+    vec3 specualrColor = prefilterColor*(F_1*envBRDF.x+envBRDF.y);
+    /*specular end*/
+
+    vec3 ambient = (kD*diffuse + L_o)*ao;
     // vec3 ambientColor = ao * albedo * ambient;
-    vec3 outColor = ambient + L_o;
+    vec3 outColor = ambient;
     //HDR
     outColor = outColor/(outColor + vec3(1.0));
     //gamma correct
