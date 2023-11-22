@@ -154,6 +154,9 @@ void PBRTesting::initialize(){
     shader->setValue("metallicMap",2);
     shader->setValue("roughnessMap",3);
     shader->setValue("aoMap",4);
+    shader->setValue("irradianceMap",5);
+    shader->setValue("prefilterMap",6);
+    shader->setValue("brdfLUT",7);
     glCheckError();
 
     albedoMap = make_shared<Texture>(PU::getFullPath(g_global_context.m_config_manager->getTextureFolder(), "default/rustediron/rustediron2_basecolor.png"),GL_TEXTURE_2D,DEFAULT);
@@ -300,7 +303,7 @@ void PBRTesting::draw(Camera &camera){
     glActiveTexture(GL_TEXTURE7);
     glBindTexture(GL_TEXTURE_2D, brdfLUTTexture);
 
-    shader->setValue("irradianceMap",5);
+
     for (unsigned int i = 0; i < lightPositions.size(); i++){
         shader->setValue("lights[" + std::to_string(i) + "].Position", lightPositions[i]);
         shader->setValue("lights[" + std::to_string(i) + "].Color", lightColors[i]);

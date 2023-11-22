@@ -120,7 +120,7 @@ void main(){
         L_o+=(kD*albedo/PI + specualrColor)*L_i*NdotL;
     }
     vec3 F = fresnelSchlickRoughness(F_0,max(0,dot(normal,frag2view)),roughness);
-    vec3 kS = F; //todo F with roughness
+    vec3 kS = F; 
     vec3 kD = 1.0-kS;
     kD*=1.0-metallic;
 
