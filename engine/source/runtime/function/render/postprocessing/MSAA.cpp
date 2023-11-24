@@ -142,7 +142,7 @@ namespace EasyEngine {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //use multi sample fbo first
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        // glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
@@ -154,16 +154,16 @@ namespace EasyEngine {
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         //copy multisample fbo to normal fbo(shader can't read from multisample fbo)
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediateFBO);
-        glBlitFramebuffer(0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight, 0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        // glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+        // glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediateFBO);
+        // glBlitFramebuffer(0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight, 0, 0, EngineWindow::getInstance().viewportWidth, EngineWindow::getInstance().viewportHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDisable(GL_DEPTH_TEST);
+        // glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // glDisable(GL_DEPTH_TEST);
         
-        // draw Screen quad
+        // // draw Screen quad
         screenShader->use();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE0);

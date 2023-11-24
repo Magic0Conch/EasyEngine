@@ -42,7 +42,7 @@ void Engine::initialize(){
     // renderPasses.emplace_back(make_shared<VisualizeNormalVectors>("common/triangle","test/visualize_normal_vectors"));
     // renderPasses.emplace_back(make_shared<InstancingTesting>("test/instancing_testing"));
     // renderPasses.emplace_back(make_shared<AsteroidField>("scene/asteroid_field"));
-    // renderPasses.emplace_back(make_shared<MSAA>("postprocessing/MSAA"));
+    renderPasses.emplace_back(make_shared<MSAA>("postprocessing/MSAA"));
     // renderPasses.emplace_back(make_shared<DepthTesting>("test/depth_testing"));
     // renderPasses.emplace_back(make_shared<ShadowMapping>("lighting/shadow_render"));
     // renderPasses.emplace_back(make_shared<ShadowMappingPoint>("lighting/shadow_render_point"));
@@ -55,7 +55,7 @@ void Engine::initialize(){
     // shared_ptr<GeometryRenderpass> grsp_view = make_shared<GeometryRenderpass>("common/geometry_view");
     // renderPasses.emplace_back(grsp_view);
     // renderPasses.emplace_back(make_shared<SSAOTest>("postprocessing/screen","postprocessing/SSAO",grsp_view));
-    renderPasses.emplace_back(make_shared<PBRTesting>("common/pbr"));
+    // renderPasses.emplace_back(make_shared<PBRTesting>("common/pbr"));
 
 
 
