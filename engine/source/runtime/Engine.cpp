@@ -2,6 +2,7 @@
 #include "runtime/function/render/DeferredLightingRenderpass.h"
 #include "runtime/function/render/GeometryRenderpass.h"
 #include "runtime/function/render/PostProcessingPass.h"
+#include "runtime/function/render/SkeletalAnimationRenderPass.h"
 #include "runtime/function/render/SkyboxRenderpass.h"
 #include "runtime/function/render/lighting/PhongLightingRenderPass.h"
 #include "runtime/function/render/lighting/ShadowMapping.h"
@@ -34,6 +35,7 @@ void Engine::initialize(){
     
     renderPasses.emplace_back(make_shared<PreProcessingPass>());
     // renderPasses.emplace_back(make_shared<PhongLightingRenderPass>("lighting/phong"));
+    renderPasses.emplace_back(make_shared<SkeletalAnimationRenderPass>("common/animation"));
     // renderPasses.emplace_back(make_shared<BlendTesting>("test/blend_testing"));
     // renderPasses.emplace_back(make_shared<SkyboxRenderpass>("skybox"));
     // renderPasses.emplace_back(make_shared<ReflectionTesting>("test/reflection_testing"));
@@ -55,7 +57,7 @@ void Engine::initialize(){
     // shared_ptr<GeometryRenderpass> grsp_view = make_shared<GeometryRenderpass>("common/geometry_view");
     // renderPasses.emplace_back(grsp_view);
     // renderPasses.emplace_back(make_shared<SSAOTest>("postprocessing/screen","postprocessing/SSAO",grsp_view));
-    renderPasses.emplace_back(make_shared<PBRTesting>("common/pbr"));
+    // renderPasses.emplace_back(make_shared<PBRTesting>("common/pbr"));
 
 
 

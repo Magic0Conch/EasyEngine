@@ -6,6 +6,8 @@
 #include "runtime/include/Shader.h"
 #include "Texture.h"
 
+constexpr int MAX_BONE_INFLUENCE = 4;
+
 namespace EasyEngine {
     using namespace std;
     
@@ -15,6 +17,9 @@ namespace EasyEngine {
         glm::vec2 texCoords;
         glm::vec3 tangent;
         glm::vec3 biTangent;
+
+        int boneIDs[MAX_BONE_INFLUENCE];
+        float weights[MAX_BONE_INFLUENCE];
     };
 
     class Mesh{

@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "runtime/resource/res_type/components/Mesh.h"
 
 namespace EasyEngine{
     using namespace std;
@@ -63,6 +64,14 @@ namespace EasyEngine{
         //bitangent
         glEnableVertexAttribArray(4);
         glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, biTangent));
+
+        //ids
+        glEnableVertexAttribArray(5);
+        glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
+
+        //weights
+        glEnableVertexAttribArray(6);
+        glVertexAttribPointer(4,4,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex, weights));
 
         glBindVertexArray(0);
     }
