@@ -71,7 +71,7 @@ namespace EasyEngine{
 
         //weights
         glEnableVertexAttribArray(6);
-        glVertexAttribPointer(4,4,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex, weights));
+        glVertexAttribPointer(6,4,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex, weights));
 
         glBindVertexArray(0);
     }

@@ -1,4 +1,5 @@
 #include "Animator.h"
+#include "runtime/core/math/Math.h"
 #include "glm/fwd.hpp"
 #include <cmath>
 
@@ -36,7 +37,10 @@ void Animator::calculateBoneTransform(const AssimpNodeData* node,glm::mat4 paren
 
     if (bone)
     {
-        bone->update(m_currentTime);
+        glm::mat4 translationMat = Math::getTranformMatrix(nodeTransform);
+        glm::mat4 scaleMat = glm::mat4(1.0);
+        
+        bone->update(m_currentTime,&translationMat,nullptr,&scaleMat);
         nodeTransform = bone->getLocalTransform();
     }
 

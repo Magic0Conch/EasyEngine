@@ -38,12 +38,49 @@ Bone::Bone(const std::string& name,int ID,const aiNodeAnim* channel):m_name(name
     }
 
 }
-void Bone::update(float animationTime){
-    glm::mat4 translation = interpolatePosition(animationTime);
-    glm::mat4 rotation = interpolateRotation(animationTime);
-    glm::mat4 scale = interpolateScaling(animationTime);
-    m_localTransform = translation * rotation * scale;
+
+Bone::Bone(const std::string& name,int ID):m_name(name),m_id(ID),m_numPositions(0),m_numRotations(0),m_numScalings(0){
+
 }
+
+void Bone::addKeyPosition(const glm::vec3& position,float timeStamp){
+    KeyPosition data;
+    data.position = position;
+    data.timeStamp = timeStamp;
+    m_positions.push_back(data);
+    ++m_numPositions;
+}
+
+void Bone::addKeyRotation(const glm::quat& rotation,float timeStamp){
+    KeyRotation data;
+    data.timeStamp = timeStamp;
+    data.orientation = rotation;
+    m_rotations.push_back(data);
+    ++m_numRotations;
+}
+
+void Bone::addKeyScaling(const glm::vec3& scale,float timeStamp){
+    KeyScale data;
+    data.timeStamp = timeStamp;
+    data.scale = scale;
+    m_scales.push_back(data);
+    ++m_numScalings;
+}
+
+void Bone::update(float animationTime,glm::mat4* translation,glm::mat4* rotation,glm::mat4* scale){
+    glm::mat4* translation_ = translation,*rotation_ = rotation,*scale_ = scale;
+    if(translation == nullptr)
+        *translation_ = interpolatePosition(animationTime);
+    if(rotation == nullptr){
+        rotation_ = new glm::mat4();
+        *rotation_ = interpolateRotation(animationTime);
+    }
+    if(scale == nullptr)
+        *scale_ = interpolateScaling(animationTime);
+    m_localTransform = (*translation_) * (*rotation_) * (*scale_);
+}
+
+
 
 glm::mat4 Bone::getLocalTransform() {
     return m_localTransform; 

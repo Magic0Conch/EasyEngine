@@ -1,7 +1,7 @@
 #include "ColorsRenderPass.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/ext/vector_float3.hpp"
-#include "runtime/function/render/RenderPass.h"
+// #include "runtime/function/render/RenderPass.h"
 using namespace EasyEngine;
 ColorsRenderPass::ColorsRenderPass(const string& shaderPath)
 : RenderPass(shaderPath),objectColor(1.0f,1.0f,1.0f)    

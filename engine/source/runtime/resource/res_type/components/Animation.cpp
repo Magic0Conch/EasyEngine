@@ -12,6 +12,8 @@ Animation::Animation(const std::string& animationPath, Model* model){
     auto animation = scene->mAnimations[0];
     m_duration = animation->mDuration;
     m_ticksPerSecond = animation->mTicksPerSecond;
+    aiMatrix4x4 globalTransformation = scene->mRootNode->mTransformation;
+    globalTransformation = globalTransformation.Inverse();
     readHeirarchyData(m_rootNode, scene->mRootNode);
     readMissingBones(animation, *model);
 }
@@ -35,19 +37,16 @@ void Animation::readMissingBones(const aiAnimation* animation, Model& model){
     auto& boneInfoMap = model.getBoneInfoMap();
     int& boneCount = model.getBoneCount();
 
-    //reading channels(bones engaged in an animation and their keyframes)
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++){
         auto channel = animation->mChannels[i];
         std::string boneName = channel->mNodeName.data;
 
-        if (boneInfoMap.find(boneName) == boneInfoMap.end())
-        {
+        if (boneInfoMap.find(boneName) == boneInfoMap.end()){
             boneInfoMap[boneName].id = boneCount;
             boneCount++;
         }
-        m_bones.push_back(Bone(channel->mNodeName.data,
-            boneInfoMap[channel->mNodeName.data].id, channel));
+        // m_bones.push_back(Bone(boneName,
+        //     boneInfoMap[boneName].id, channel));
     }
     m_boneInfoMap = boneInfoMap;
 }

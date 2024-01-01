@@ -1,30 +1,13 @@
 #include "Engine.h"
-#include "runtime/function/render/DeferredLightingRenderpass.h"
-#include "runtime/function/render/GeometryRenderpass.h"
-#include "runtime/function/render/PostProcessingPass.h"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/fwd.hpp"
+#include "glm/geometric.hpp"
+#include "runtime/Engine.h"
 #include "runtime/function/render/SkeletalAnimationRenderPass.h"
-#include "runtime/function/render/SkyboxRenderpass.h"
-#include "runtime/function/render/lighting/PhongLightingRenderPass.h"
-#include "runtime/function/render/lighting/ShadowMapping.h"
-#include "runtime/function/render/lighting/ShadowMappingPoint.h"
-#include "runtime/function/render/postprocessing/Bloom.h"
-#include "runtime/function/render/postprocessing/MSAA.h"
 #include "runtime/function/render/preprocessing/PreProcessingPass.h"
-#include "runtime/function/render/scene/AsteroidField.h"
-#include "runtime/function/render/test/BlendTesting.h"
-#include "runtime/function/render/test/DepthTesting.h"
-#include "runtime/function/render/test/ExplodingObjects.h"
-#include "runtime/function/render/test/GammaCorrectionTesting.h"
-#include "runtime/function/render/test/GeometryTesting.h"
-#include "runtime/function/render/test/InstancingTesting.h"
-#include "runtime/function/render/test/PBRTesting.h"
-#include "runtime/function/render/test/ParallexTesting.h"
-#include "runtime/function/render/test/ReflectionTesting.h"
-#include "runtime/function/render/test/SSAOTest.h"
-#include "runtime/function/render/test/StencilTesting.h"
-#include "runtime/function/render/test/VisualizeNormalVectors.h"
-#include "runtime/function/render/test/NormalmapTesting.h"
 #include "runtime/include/InputHandler.h"
+#include "runtime/include/WindowTime.h"
+#include "runtime/resource/res_type/components/Camera.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -32,10 +15,14 @@
 using namespace EasyEngine;
 
 void Engine::initialize(){
+    camera.setCameraPosition(glm::vec3(0,1.65,-2.4));
+    camera.setCameraRotation(glm::vec3(0,0,1),glm::vec3(0,1,0));
+    // camera.setCameraDirectionByTarget(glm::vec3(0,0,0));
+    
     
     renderPasses.emplace_back(make_shared<PreProcessingPass>());
     // renderPasses.emplace_back(make_shared<PhongLightingRenderPass>("lighting/phong"));
-    renderPasses.emplace_back(make_shared<SkeletalAnimationRenderPass>("common/animation"));
+    renderPasses.emplace_back(make_shared<SkeletalAnimationRenderPass>("common/animation",camera));
     // renderPasses.emplace_back(make_shared<BlendTesting>("test/blend_testing"));
     // renderPasses.emplace_back(make_shared<SkyboxRenderpass>("skybox"));
     // renderPasses.emplace_back(make_shared<ReflectionTesting>("test/reflection_testing"));
@@ -75,16 +62,25 @@ void Engine::tickRender() {
     }    
     // phongLightingRenderPass->draw(camera);
 }
+
+void Engine::tickLogic(){
+    cout<<camera.cameraPosition.x<<endl;
+    
+
+}
+
+
 void Engine::mainLoop() {
     //Time
     WindowTime::updateTimeValue();
     //Events
     glfwPollEvents();
     InputHandler::getInstance().handleInput(EngineWindow::getInstance().window);
-    cameraController.processInput();
+    // cameraController.processInput();
     //render
     glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+    tickLogic();
     tickRender();
     glfwSwapBuffers(EngineWindow::getInstance().window);
 }
@@ -112,7 +108,7 @@ Engine::Engine(){
     const std::string configPath = PU::getFullPath(BINARY_ROOT_DIR, "configs/global_config.ini");
     g_global_context.initializeContext(configPath);	
     // jsonManipulation = JsonManipulation(PU::getFullPath(g_global_context.m_config_manager->getDataFolder(),"scene.json"));
-    cameraController = CameraController(camera);
+    // cameraController = CameraController(camera);
     
 }
 

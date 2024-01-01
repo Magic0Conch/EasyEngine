@@ -38,13 +38,18 @@ private:
     int m_id;
 public:
     Bone(const std::string& name,int ID,const aiNodeAnim* channel);
-    void update(float animationTime);
+    Bone(const std::string& name,int ID);
+    void update(float animationTime,glm::mat4* translation = nullptr,glm::mat4* rotation = nullptr,glm::mat4* scale = nullptr);
+    
     glm::mat4 getLocalTransform();
     std::string getBoneName() const;
     int getBoneID();
     int seekPositionIndex(float animationTime);
     int seekRotationIndex(float animationTime);
     int seekScaleIndex(float animationTime);
+    void addKeyPosition(const glm::vec3& position,float timeStamp);
+    void addKeyRotation(const glm::quat& rotation,float timeStamp);
+    void addKeyScaling(const glm::vec3& scale,float timeStamp);
 private:
     float getScaleFactor(float lastTimeStamp,float nextTimeStamp,float animationTime);
     glm::mat4 interpolatePosition(float animationTime);

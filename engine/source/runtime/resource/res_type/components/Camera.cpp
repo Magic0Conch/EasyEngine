@@ -9,7 +9,7 @@ Camera::Camera(const CameraType& cameraType):cameraType(cameraType) {
 	cameraFront = glm::vec3(0.0, 0.0, -1.0);
 	cameraUp = glm::vec3(0.0, 1.0, 0.0);
 	cameraEulerRotation = glm::vec3(-90.0f, 0.0f, 0.0f);
-	fov = 30.0f;
+	fov = 60.0f;
 }
 
 Camera::Camera(const glm::vec3& initialPose, const glm::vec3& initialDirection) {
@@ -32,13 +32,13 @@ Camera::~Camera() {
 
 }
 
-//void Camera::setCameraDirectionByTarget(const glm::vec3 targetPosition) {
-//	glm::vec3 cameraDirection = glm::normalize(cameraPosition - targetPosition);
-//	glm::vec3 cameraRight = glm::normalize(glm::cross(world_up, cameraDirection));
-//	cameraUp = glm::cross(cameraDirection, cameraRight);
-//	this->targetPosition = targetPosition;
-//	
-//}
+void Camera::setCameraDirectionByTarget(const glm::vec3 targetPosition) {
+	glm::vec3 cameraDirection = glm::normalize(cameraPosition - targetPosition);
+	glm::vec3 cameraRight = glm::normalize(glm::cross(world_up, cameraDirection));
+	cameraUp = glm::cross(cameraDirection, cameraRight);
+	this->targetPosition = targetPosition;
+	this->cameraFront = -cameraDirection;
+}
 
 void Camera::setCameraPosition(const glm::vec3 cameraPosition) {
 	this->cameraPosition = cameraPosition;

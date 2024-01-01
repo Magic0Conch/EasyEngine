@@ -82,6 +82,10 @@ namespace EasyEngine{
             textures.insert(textures.end(),diffuseMaps.begin(),diffuseMaps.end());
             vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
             textures.insert(textures.end(), specularMaps.begin(),specularMaps.end());
+            std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_NORMALS, "texture_normal");
+            textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+            std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+            textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
         }
         extractBoneWeightForVertices(vertices, mesh, scene);
         return Mesh(vertices,indices,textures);
@@ -155,7 +159,7 @@ namespace EasyEngine{
             assert(boneID != -1);
             auto weights = mesh->mBones[boneIndex]->mWeights;
             int numWeights = mesh->mBones[boneIndex]->mNumWeights;
-            for (int weightIndex = 0; weightIndex < numWeights; numWeights++) {
+            for (int weightIndex = 0; weightIndex < numWeights; weightIndex++) {
                 int vertexId = weights[weightIndex].mVertexId;
                 float weight = weights[weightIndex].mWeight;
                 assert(vertexId <= vertices.size());

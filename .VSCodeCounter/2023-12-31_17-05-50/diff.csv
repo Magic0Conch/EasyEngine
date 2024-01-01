@@ -1,0 +1,10 @@
+"filename", "language", "JSON", "GLSL", "C++", "comment", "blank", "total"
+"e:\work\github\EasyEngine\engine\asset\data\pose\results_test_pose.json", "JSON", 55816, 0, 0, 0, 0, 55816
+"e:\work\github\EasyEngine\engine\shader\common\animation.frag", "GLSL", 0, 17, 0, 1, 5, 23
+"e:\work\github\EasyEngine\engine\shader\common\animation.vert", "GLSL", 0, 2, 0, 0, -1, 1
+"e:\work\github\EasyEngine\engine\source\runtime\Engine.cpp", "C++", 0, 0, 2, 1, 0, 3
+"e:\work\github\EasyEngine\engine\source\runtime\function\render\SkeletalAnimationRenderPass.cpp", "C++", 0, 0, 31, 3, 6, 40
+"e:\work\github\EasyEngine\engine\source\runtime\function\render\SkeletalAnimationRenderPass.h", "C++", 0, 0, 30, 0, 3, 33
+"e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Animation.cpp", "C++", 0, 0, 2, 0, 0, 2
+"e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Model.cpp", "C++", 0, 0, 4, 0, 0, 4
+"Total", "-", 55816, 19, 69, 5, 13, 55922
