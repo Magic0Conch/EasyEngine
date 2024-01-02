@@ -5,6 +5,7 @@
 #include "runtime/platform/path_utility/PathUtility.h"
 #include "runtime/function/global/global_context.h"
 #include "runtime/core/math/CoordinateMapper.h"
+#include "runtime/core/math/Math.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -35,7 +36,10 @@ public:
                 auto worldPosition = m_coordinateMapper->screen2world(ssx, ssy);
                 mp[id2Name[i]] = worldPosition;
             }
-            mp["neck"] = (mp["left_shoulder"] + mp["right_shoulder"])*0.5f;
+
+            mp["lower_spine"] = Math::bilinearInterpolation(0.5,-100.0f,mp["left_hip"],mp["right_hip"],mp["left_shoulder"],mp["right_shoulder"]);
+            mp["middle_spine"] = Math::bilinearInterpolation(0.5,0.2f,mp["left_hip"],mp["right_hip"],mp["left_shoulder"],mp["right_shoulder"]);
+            mp["neck"] = Math::bilinearInterpolation(0.5,0.15f,mp["left_shoulder"],mp["right_shoulder"],mp["left_ear"],mp["right_ear"]);
             m_keypointWorldPositions.emplace_back(mp);
         }
     }

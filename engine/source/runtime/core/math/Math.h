@@ -14,28 +14,16 @@ namespace EasyEngine {
             return a + f*(b-a);
         }
 
-        static void decomposeMatrix(const glm::mat4& transformMatrix, glm::mat4* translation, glm::mat4* rotation, glm::mat4* scale){
-            if(translation!=nullptr)
-                *translation = glm::translate(glm::mat4(1.0f),  glm::vec3(transformMatrix[3]));
-            float x = glm::length(glm::vec3(transformMatrix[0]));
-            float y = glm::length(glm::vec3(transformMatrix[1]));
-            float z = glm::length(glm::vec3(transformMatrix[2]));
-            if(scale!=nullptr){
-                scale = new glm::mat4(1.0);
-                (*scale)[0][0] = x;
-                (*scale)[1][1] = y;
-                (*scale)[2][2] = z;
-            }
-            if(rotation!=nullptr){
-                rotation = new glm::mat4(transformMatrix);
-                rotation[0]/=x;
-                rotation[1]/=y;
-                rotation[2]/=z;
-            }
-        }
+
 
         static glm::mat4 getTranformMatrix(const glm::mat4& transformMatrix){
             return glm::translate(glm::mat4(1.0f),  glm::vec3(transformMatrix[3]));
+        }
+
+        template<class T>
+        static T bilinearInterpolation(float u, float v,const T& m_bottomLeft,const T& m_bottomRight,const T& m_topLeft,const T& m_topRight) {
+            const T result = glm::mix(glm::mix(m_bottomLeft, m_bottomRight, u),glm::mix(m_topLeft,m_topRight, u), v);
+            return result;
         }
     };
 

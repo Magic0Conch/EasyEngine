@@ -2,7 +2,8 @@
 #include "runtime/core/math/Math.h"
 #include "glm/fwd.hpp"
 #include <cmath>
-
+#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/gtx/euler_angles.hpp>
 using namespace EasyEngine;
 
 Animator::Animator(Animation* animation){
@@ -32,7 +33,16 @@ void Animator::playAnimation(Animation* animation){
 void Animator::calculateBoneTransform(const AssimpNodeData* node,glm::mat4 parentTransform){
     std::string nodeName = node->name;
     glm::mat4 nodeTransform = node->transformation;
-
+    
+    // glm::vec3 scale;
+    // glm::quat rotation;
+    // glm::vec3 translation;
+    // glm::vec3 skew;
+    // glm::vec4 perspective;
+    // glm::decompose(nodeTransform, scale, rotation, translation, skew,perspective);
+    // rotation=glm::conjugate(rotation);
+    // glm::vec3 eurlerAngles = glm::eulerAngles(rotation);
+    // glm::vec3 eulerAnglesDegrees = glm::degrees(eurlerAngles);
     Bone* bone = m_currentAnimation->findBone(nodeName);
 
     if (bone)

@@ -1,7 +1,9 @@
 #pragma once
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
+#include "runtime/core/math/Math.h"
 #include "runtime/resource/res_type/components/Camera.h"
+#include "Math.h"
 #include <corecrt_math.h>
 #include <memory>
 #include <mutex>
@@ -56,7 +58,7 @@ namespace EasyEngine {
 
     private:
         glm::vec3 bilinearInterpolation(float u, float v) {
-            const glm::vec3 cameraSpacePositon = glm::mix(glm::mix(m_bottomLeft, m_bottomRight, u),glm::mix(m_topLeft,m_topRight, u), v)*m_planeDistance;
+            const glm::vec3 cameraSpacePositon =  Math::bilinearInterpolation(u, v, m_bottomLeft, m_bottomRight, m_topLeft, m_topRight) *m_planeDistance;
             glm::vec3 worldSpacePosition = cameraSpacePositon + m_camera->cameraPosition;
             return worldSpacePosition;
         }
