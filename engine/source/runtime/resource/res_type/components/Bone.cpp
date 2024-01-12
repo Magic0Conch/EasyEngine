@@ -80,6 +80,19 @@ void Bone::update(float animationTime,glm::mat4* translation,glm::mat4* rotation
     m_localTransform = (*translation_) * (*rotation_) * (*scale_);
 }
 
+void Bone::update(int frameIndex,glm::mat4* translation,glm::mat4* rotation,glm::mat4* scale){
+    glm::mat4* translation_ = translation,*rotation_ = rotation,*scale_ = scale;
+    if(translation == nullptr)
+        *translation_ = interpolatePosition(frameIndex);
+    if(rotation == nullptr){
+        rotation_ = new glm::mat4();
+        *rotation_ = interpolateRotation(frameIndex);
+    }
+    if(scale == nullptr)
+        *scale_ = interpolateScaling(frameIndex);
+    m_localTransform = (*translation_) * (*rotation_) * (*scale_);
+    m_index = frameIndex% m_numRotations;
+}
 
 
 glm::mat4 Bone::getLocalTransform() {
@@ -168,5 +181,33 @@ glm::mat4 Bone::interpolateScaling(float animationTime){
         m_scales[p1Index].timeStamp, animationTime);
     glm::vec3 finalScale = glm::mix(m_scales[p0Index].scale, m_scales[p1Index].scale
         , scaleFactor);
+    return glm::scale(glm::mat4(1.0f), finalScale);
+}
+
+glm::mat4 Bone::interpolatePosition(int index){
+    if (1 == m_numPositions)
+        return glm::translate(glm::mat4(1.0f), m_positions[0].position);
+
+    glm::quat finalRotation = m_rotations[m_index].orientation;
+    finalRotation = glm::normalize(finalRotation);
+}
+
+glm::mat4 Bone::interpolateRotation(int index){
+    if (1 == m_numRotations){
+        auto rotation = glm::normalize(m_rotations[0].orientation);
+        return glm::toMat4(rotation);
+    }
+    
+    glm::quat finalRotation = m_rotations[m_index].orientation;
+    finalRotation = glm::normalize(finalRotation);
+    return glm::toMat4(finalRotation);
+}
+
+glm::mat4 Bone::interpolateScaling(int index){
+
+    if (1 == m_numScalings)
+        return glm::scale(glm::mat4(1.0f), m_scales[0].scale);
+
+    glm::vec3 finalScale = m_scales[m_index].scale;
     return glm::scale(glm::mat4(1.0f), finalScale);
 }

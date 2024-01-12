@@ -28,7 +28,7 @@ private:
     std::vector<KeyPosition> m_positions;
     std::vector<KeyRotation> m_rotations;
     std::vector<KeyScale> m_scales;
-
+    int m_index = 0;
     int m_numPositions;
     int m_numRotations;
     int m_numScalings;
@@ -40,7 +40,7 @@ public:
     Bone(const std::string& name,int ID,const aiNodeAnim* channel);
     Bone(const std::string& name,int ID);
     void update(float animationTime,glm::mat4* translation = nullptr,glm::mat4* rotation = nullptr,glm::mat4* scale = nullptr);
-    
+    void update(int frameIndex,glm::mat4* translation,glm::mat4* rotation,glm::mat4* scale);
     glm::mat4 getLocalTransform();
     std::string getBoneName() const;
     int getBoneID();
@@ -55,5 +55,8 @@ private:
     glm::mat4 interpolatePosition(float animationTime);
     glm::mat4 interpolateRotation(float animationTime);
     glm::mat4 interpolateScaling(float animationTime);
+    glm::mat4 interpolatePosition(int index);
+    glm::mat4 interpolateRotation(int index);
+    glm::mat4 interpolateScaling(int index);
 };
 }

@@ -1,0 +1,51 @@
+Date : 2024-01-02 22:21:19
+Directory : e:\work\github\EasyEngine
+Total : 14 files,  263 codes, 17 comments, 51 blanks, all 331 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C++      |         14 |        263 |         17 |         51 |        331 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                            | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                               |         14 |        263 |         17 |         51 |        331 |
+| engine                                                                                          |         14 |        263 |         17 |         51 |        331 |
+| engine\source                                                                                   |         14 |        263 |         17 |         51 |        331 |
+| engine\source\runtime                                                                           |         14 |        263 |         17 |         51 |        331 |
+| engine\source\runtime (Files)                                                                   |          2 |        -11 |          2 |          5 |         -4 |
+| engine\source\runtime\core                                                                      |          2 |         73 |          0 |         14 |         87 |
+| engine\source\runtime\core\math                                                                 |          2 |         73 |          0 |         14 |         87 |
+| engine\source\runtime\function                                                                  |          4 |        152 |         10 |         21 |        183 |
+| engine\source\runtime\function\input                                                            |          1 |         57 |          0 |          5 |         62 |
+| engine\source\runtime\function\render                                                           |          3 |         95 |         10 |         16 |        121 |
+| engine\source\runtime\function\render\lighting                                                  |          1 |         -1 |          1 |          0 |          0 |
+| engine\source\runtime\resource                                                                  |          6 |         49 |          5 |         11 |         65 |
+| engine\source\runtime\resource\res_type                                                         |          6 |         49 |          5 |         11 |         65 |
+| engine\source\runtime\resource\res_type\components                                              |          6 |         49 |          5 |         11 |         65 |
++-------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                        | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| e:\work\github\EasyEngine\engine\source\runtime\Engine.cpp                                      | C++      |        -14 |          3 |          6 |         -5 |
+| e:\work\github\EasyEngine\engine\source\runtime\Engine.h                                        | C++      |          3 |         -1 |         -1 |          1 |
+| e:\work\github\EasyEngine\engine\source\runtime\core\math\CoordinateMapper.h                    | C++      |         60 |          0 |         11 |         71 |
+| e:\work\github\EasyEngine\engine\source\runtime\core\math\Math.h                                | C++      |         13 |          0 |          3 |         16 |
+| e:\work\github\EasyEngine\engine\source\runtime\function\input\AnimationInputManager.h          | C++      |         57 |          0 |          5 |         62 |
+| e:\work\github\EasyEngine\engine\source\runtime\function\render\SkeletalAnimationRenderPass.cpp | C++      |         63 |          2 |          7 |         72 |
+| e:\work\github\EasyEngine\engine\source\runtime\function\render\SkeletalAnimationRenderPass.h   | C++      |         33 |          7 |          9 |         49 |
+| e:\work\github\EasyEngine\engine\source\runtime\function\render\lighting\ColorsRenderPass.cpp   | C++      |         -1 |          1 |          0 |          0 |
+| e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Animation.cpp      | C++      |         -4 |          1 |          0 |         -3 |
+| e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Animation.h        | C++      |          8 |          2 |          2 |         12 |
+| e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Animator.cpp       | C++      |          5 |          9 |          0 |         14 |
+| e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Bone.cpp           | C++      |         29 |          0 |          8 |         37 |
+| e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Bone.h             | C++      |          4 |          0 |          1 |          5 |
+| e:\work\github\EasyEngine\engine\source\runtime\resource\res_type\components\Camera.cpp         | C++      |          7 |         -7 |          0 |          0 |
+| Total                                                                                           |          |        263 |         17 |         51 |        331 |
++-------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

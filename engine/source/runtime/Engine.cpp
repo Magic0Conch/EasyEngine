@@ -15,7 +15,7 @@
 using namespace EasyEngine;
 
 void Engine::initialize(){
-    camera.setCameraPosition(glm::vec3(0,1.65,-2.4));
+    camera.setCameraPosition(glm::vec3(0,1.65,-4.2));
     camera.setCameraRotation(glm::vec3(0,0,1),glm::vec3(0,1,0));
     // camera.setCameraDirectionByTarget(glm::vec3(0,0,0));
     
@@ -76,7 +76,7 @@ void Engine::mainLoop() {
     //Events
     glfwPollEvents();
     InputHandler::getInstance().handleInput(EngineWindow::getInstance().window);
-    // cameraController.processInput();
+    cameraController.processInput();
     //render
     glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
@@ -108,7 +108,7 @@ Engine::Engine(){
     const std::string configPath = PU::getFullPath(BINARY_ROOT_DIR, "configs/global_config.ini");
     g_global_context.initializeContext(configPath);	
     // jsonManipulation = JsonManipulation(PU::getFullPath(g_global_context.m_config_manager->getDataFolder(),"scene.json"));
-    // cameraController = CameraController(camera);
+    cameraController = CameraController(camera);
     
 }
 

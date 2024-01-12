@@ -3,9 +3,11 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <string>
+#include <vector>
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/quaternion.hpp"
+#include "runtime/include/Shader.h"
 #include "runtime/resource/res_type/components/Animation.h"
 #include "runtime/resource/res_type/components/Animator.h"
 #include "runtime/resource/res_type/components/Camera.h"
@@ -44,6 +46,7 @@ namespace EasyEngine {
             auto tailPosition = m_animationInputManager->getKeypoint(frameIndex, tail);
             glm::vec3 directionTail = glm::normalize(tailPosition - middlePosition);
             glm::vec3 directionHead = glm::normalize(middlePosition - headPosition);
+            // Math::decomposeVector3D(directionHead, directionTail, directionTail,directionHead, directionTail);
             // glm::mat4 rotationMatrix = glm::lookAt(glm::vec3(0), direction, glm::vec3(0.0f, 0.0f, -1.0f));
 
             glm::vec3 rotateAxis = glm::normalize(glm::cross(directionTail,directionHead));
@@ -52,6 +55,17 @@ namespace EasyEngine {
             auto rotationQuaternion = glm::angleAxis(rotateAngle, rotateAxis);
 
             // auto rotationQuaternion = glm::toQuat(rotationMatrix);
+            return rotationQuaternion;
+        }
+
+        glm::quat calculateDeltaByInitPose(int frameIndex,const std::string& head,const std::string& tail,const string& refBoneName){
+            auto headPosition = m_animationInputManager->getKeypoint(frameIndex, head);
+            auto tailPosition = m_animationInputManager->getKeypoint(frameIndex, tail);
+            glm::vec3 curDirection = glm::normalize(tailPosition - headPosition);
+            auto refDirection = m_animationInputManager->getRefDirectionByBoneName(refBoneName);
+            glm::vec3 rotateAxis = glm::normalize(glm::cross(refDirection,curDirection));
+            auto rotateAngle = glm::acos(glm::dot(curDirection, refDirection));
+            auto rotationQuaternion = glm::angleAxis(rotateAngle, rotateAxis);
             return rotationQuaternion;
         }
 
@@ -78,5 +92,10 @@ namespace EasyEngine {
         std::shared_ptr<Model> model;
         Camera& m_camera;
         std::unique_ptr<AnimationInputManager> m_animationInputManager;
+        //debug 
+        shared_ptr<Shader> m_pointShader;
+        GLuint m_pointVAO,m_pointVBO;
+        std::vector<GLfloat> m_points;
+        int frameCnt = 0;
     };
 }

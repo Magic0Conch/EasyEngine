@@ -15,5 +15,6 @@ private:
     Animation* m_currentAnimation;
     float m_currentTime;
     float m_deltaTime;
+    int m_frameIndex;
 };
 }

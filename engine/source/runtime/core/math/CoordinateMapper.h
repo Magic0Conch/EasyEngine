@@ -1,10 +1,13 @@
 #pragma once
+#include "glm/exponential.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "runtime/core/math/Math.h"
 #include "runtime/resource/res_type/components/Camera.h"
 #include "Math.h"
+#include <cmath>
 #include <corecrt_math.h>
+#include <cstdlib>
 #include <memory>
 #include <mutex>
 namespace EasyEngine {
@@ -52,16 +55,46 @@ namespace EasyEngine {
         glm::vec3 screen2world(float screenSpaceX,float screenSpaceY){
             const float u = screenSpaceX/m_resolution.x;
             const float v = 1-screenSpaceY/m_resolution.y;
-            return bilinearInterpolation(u, v);
+            return getWorldSpacePositon(u, v);
         }
 
+        glm::vec3 screen2WorldFromRefPos(const glm::vec3& refWorldPosition,const glm::vec2& screenPos,const float boneLength){
+            const float distanceBetweenCameraAndRefWorldPosition = glm::distance(refWorldPosition, this->m_camera->cameraPosition);
+            const float u = screenPos.x/m_resolution.x;
+            const float v = 1-screenPos.y/m_resolution.y;
+            auto dir = Math::bilinearInterpolation(u, v, m_bottomLeft, m_bottomRight, m_topLeft, m_topRight);
+            dir = glm::normalize(dir);
+            auto cameraToRefDir = glm::normalize(glm::vec3(refWorldPosition - this->m_camera->cameraPosition));
+            const float cosTheta = glm::dot(cameraToRefDir, dir);
+
+            double aSuqare = distanceBetweenCameraAndRefWorldPosition * distanceBetweenCameraAndRefWorldPosition;
+            double discriminantSquare = abs(4*aSuqare*cosTheta*cosTheta - 4*(aSuqare-boneLength*boneLength));
+            double discriminant = sqrt(discriminantSquare);
+            float distanceBetweenCameraAndTarget = (2*distanceBetweenCameraAndRefWorldPosition*cosTheta+discriminant)/2;
+            // if(discriminantSquare<0) 
+            //     distanceBetweenCameraAndTarget = distanceBetweenCameraAndRefWorldPosition;
+            auto cameraSpacePos = dir*distanceBetweenCameraAndTarget;
+            auto worldPos = cameraSpacePos + this->m_camera->cameraPosition;
+            return worldPos;
+        }
 
     private:
-        glm::vec3 bilinearInterpolation(float u, float v) {
+        glm::vec3 getCameraSpacePosition(float u,float v){
             const glm::vec3 cameraSpacePositon =  Math::bilinearInterpolation(u, v, m_bottomLeft, m_bottomRight, m_topLeft, m_topRight) *m_planeDistance;
-            glm::vec3 worldSpacePosition = cameraSpacePositon + m_camera->cameraPosition;
+            return cameraSpacePositon;
+        }
+
+        glm::vec3 getWorldSpacePositon(float u,float v){
+            const auto cameraSpacePositon = getCameraSpacePosition(u, v);
+            auto worldSpacePosition = cameraSpacePositon + m_camera->cameraPosition;
             return worldSpacePosition;
         }
+
+        // glm::vec3 bilinearInterpolation(float u, float v) {
+        //     const glm::vec3 cameraSpacePositon =  Math::bilinearInterpolation(u, v, m_bottomLeft, m_bottomRight, m_topLeft, m_topRight) *m_planeDistance;
+        //     glm::vec3 worldSpacePosition = cameraSpacePositon + m_camera->cameraPosition;
+        //     return worldSpacePosition;
+        // }
         std::shared_ptr<Camera> m_camera;
         glm::vec2 m_resolution;
         glm::vec3 m_topLeft,m_topRight,m_bottomLeft,m_bottomRight; 

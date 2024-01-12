@@ -1,0 +1,14 @@
+{
+    "name": "jiangling", 
+    "part_len": 
+    {
+        "nose-neck": 0.2, 
+        "left_wrist-left_elbow": 0.22, 
+        "left_elbow-left_shoulder": 0.24, 
+        "left_shoulder-right_shoulder": 0.37, 
+        "left_shoulder-left_hip": 0.52, 
+        "left_hip-left_knee": 0.4, 
+        "left_knee-left_ankle": 0.35, 
+        "left_hip-right_hip": 0.3
+    }
+}
